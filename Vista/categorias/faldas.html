@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administrador - Faldas</title>
+    <title>Administrador</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         :root {
@@ -122,13 +122,13 @@
 <body>
     <div id="sidebar" class="text-white">
         <div class="sidebar-logo">MYU WEB</div>
-        
+
         <div id="user-info">
             <img src="Imagenes/jefauu.jpg" alt="User">
             <div>Tay</div>
             <div class="text-success">• ONLINE</div>
         </div>
-        
+
         <ul class="nav flex-column">
             <li class="nav-item">
                 <a href="/Vista/productos.html" class="nav-link">🛍️ Productos</a>
@@ -145,9 +145,10 @@
                     <li><a href="/Vista/categorias/poleras_casacas.html" class="nav-link">Poleras y Casacas</a></li>
                     <li><a href="/Vista/categorias/zapatos_zapatillas.html" class="nav-link">Zapatos y Zapatillas</a></li>
                     <li><a href="/Vista/categorias/medias_pantys.html" class="nav-link">Medias y Pantys</a></li>
-                    <li><a href="#" class="nav-link category-toggle" onclick="toggleSubmenu('accesoriosSubmenu')">
-                        🎒 Accesorios
-                    </a>
+                    <li>
+                        <a href="#" class="nav-link category-toggle" onclick="toggleSubmenu('accesoriosSubmenu')">
+                            🎒 Accesorios
+                        </a>
                         <ul class="submenu" id="accesoriosSubmenu">
                             <li><a href="/Vista/categorias/accesorios/gorras.html" class="nav-link">Gorras</a></li>
                             <li><a href="/Vista/categorias/accesorios/lentes.html" class="nav-link">Lentes de Sol</a></li>
@@ -166,8 +167,8 @@
     </div>
 
     <div id="main-content">
-        <h1>MYU - Faldas</h1>
-        <p>¡Bienvenido a la sección de faldas!</p>
+        <h1>MYU - Dashboard</h1>
+        <p>¡Bienvenido al panel de administración!</p>
 
         <!-- Botón para abrir el modal de agregar producto -->
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productModal">Agregar Producto</button>
@@ -182,7 +183,7 @@
                     <th>Precio</th>
                     <th>Imágenes</th>
                     <th>Talla</th>
-                    <th>Color</th>
+                    <th>Colores</th>
                     <th>Stock</th>
                     <th>Fecha de Registro</th>
                     <th>Acciones</th>
@@ -248,8 +249,8 @@
                                 <input type="text" class="form-control" id="talla" placeholder="Talla">
                             </div>
                             <div class="col-md-6">
-                                <label for="color" class="form-label">Color</label>
-                                <input type="text" class="form-control" id="color" placeholder="Color">
+                                <label for="colores" class="form-label">Colores (separados por comas)</label>
+                                <input type="text" class="form-control" id="colores" placeholder="Ejemplo: Rojo, Azul, Verde">
                             </div>
                         </div>
                         <div class="row">
@@ -290,7 +291,7 @@
                             <img src="${producto.img4}" width="50" alt="img4">
                         </td>
                         <td>${producto.talla}</td>
-                        <td>${producto.color}</td>
+                        <td>${producto.colores.split(',').map(c => `<span class="badge bg-info">${c}</span>`).join(' ')}</td>
                         <td>${producto.stock}</td>
                         <td>${producto.fechaRegistro}</td>
                         <td>
@@ -315,11 +316,11 @@
             const img3 = document.getElementById('img3').value;
             const img4 = document.getElementById('img4').value;
             const talla = document.getElementById('talla').value;
-            const color = document.getElementById('color').value;
+            const colores = document.getElementById('colores').value; // Colores separados por comas
             const stock = document.getElementById('stock').value;
             const fechaRegistro = document.getElementById('fechaRegistro').value;
 
-            const newProducto = { idProducto, idCategoria, desProducto, precio, img1, img2, img3, img4, talla, color, stock, fechaRegistro };
+            const newProducto = { idProducto, idCategoria, desProducto, precio, img1, img2, img3, img4, talla, colores, stock, fechaRegistro };
 
             if (idProducto) {
                 productos[idProducto] = newProducto;
@@ -345,7 +346,7 @@
             document.getElementById('img3').value = producto.img3;
             document.getElementById('img4').value = producto.img4;
             document.getElementById('talla').value = producto.talla;
-            document.getElementById('color').value = producto.color;
+            document.getElementById('colores').value = producto.colores;
             document.getElementById('stock').value = producto.stock;
             document.getElementById('fechaRegistro').value = producto.fechaRegistro;
 
@@ -360,13 +361,14 @@
             renderProductos();
         }
 
-        // Función para manejar submenús desplegables
-        window.toggleSubmenu = (submenuId) => {
-            const submenu = document.getElementById(submenuId);
-            submenu.classList.toggle('show');
-            const toggleButton = document.querySelector(`a[onclick="toggleSubmenu('${submenuId}')"]`);
-            toggleButton.classList.toggle('open');
-        };
+        // Controlar la apertura y cierre de submenús
+        document.querySelectorAll('.category-toggle').forEach(toggle => {
+            toggle.addEventListener('click', function() {
+                const submenu = this.nextElementSibling;
+                submenu.classList.toggle('show'); // Mostrar u ocultar el submenu
+                this.classList.toggle('open'); // Cambiar la flecha
+            });
+        });
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

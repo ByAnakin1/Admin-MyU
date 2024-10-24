@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrador</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --sidebar-bg: #2c3e50;
+            --header-bg: #2c3e50;
+            --pink: #e83e8c;
+            --hover-bg: rgba(232, 62, 140, 0.5);
+        }
+        body, html {
+            height: 100%;
+        }
+        #sidebar {
+            background-color: var(--sidebar-bg);
+            width: 280px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            overflow-y: auto;
+        }
+        .sidebar-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            padding: 1rem;
+        }
+        .nav-link {
+            color: white;
+            padding: 0.5rem 1rem;
+        }
+        .nav-link:hover {
+            background-color: var(--hover-bg);
+        }
+        #user-info {
+            padding: 1rem;
+            text-align: center;
+        }
+        #user-info img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 0.5rem;
+        }
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .submenu.show {
+            max-height: 500px; /* Ajuste suficiente para mostrar las opciones */
+        }
+        .submenu .nav-link {
+            padding-left: 2rem;
+        }
+        .category-toggle::after {
+            content: ' ▼';
+            font-size: 0.8em;
+        }
+        .category-toggle.open::after {
+            content: ' ▲';
+        }
+        #main-content {
+            margin-left: 280px;
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div id="sidebar" class="text-white">
+        <div class="sidebar-logo">MYU WEB</div>
+        
+        <div id="user-info">
+            <img src="Imagenes/jefauu.jpg" alt="User">
+            <div>Tay</div>
+            <div class="text-success">• ONLINE</div>
+        </div>
+        
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a href="/Vista/productos.html" class="nav-link" onclick="showContent('productos')">🛍️ Productos</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link category-toggle" onclick="toggleSubmenu('categoriasSubmenu')">
+                    🏷️ Categorías
+                </a>
+                <ul class="submenu" id="categoriasSubmenu">
+                    <li><a href="../Vista/categorias/vestidos.html" class="nav-link" onclick="keepSubmenuOpen()">Vestidos</a></li>
+                    <li><a href="../Vista/categorias/faldas.html" class="nav-link" onclick="keepSubmenuOpen()">Faldas</a></li>
+                    <li><a href="../Vista/categorias/pantalones_shorts.html" class="nav-link" onclick="keepSubmenuOpen()">Pantalones y Shorts</a></li>
+                    <li><a href="../Vista/categorias/polos_tops.html" class="nav-link" onclick="keepSubmenuOpen()">Polos y Tops</a></li>
+                    <li><a href="../Vista/categorias/poleras_casacas.html" class="nav-link" onclick="keepSubmenuOpen()">Poleras y Casacas</a></li>
+                    <li><a href="../Vista/categorias/zapatos_zapatillas.html" class="nav-link" onclick="keepSubmenuOpen()">Zapatos y Zapatillas</a></li>
+                    <li><a href="../Vista/categorias/medias_pantys.html" class="nav-link" onclick="keepSubmenuOpen()">Medias y Pantys</a></li>
+                    <li><a href="../Vista/categorias/carteras_mochilas.html" class="nav-link" onclick="keepSubmenuOpen()">Carteras y Mochilas</a></li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a href="/Vista/ventas.html" class="nav-link" onclick="showContent('ventas')">💰 Ventas</a>
+            </li>
+            <li class="nav-item">
+                <a href="/Vista/reportes.html" class="nav-link" onclick="showContent('reportes')">📈 Reportes</a>
+            </li>
+        </ul>
+    </div>
+
+    <div id="main-content">
+        <h1>MYU - Dashboard</h1>
+        <p>¡Bienvenido al panel de administracion!</p>
+    </div>
+
+    <script type="module">
+        // Variable para mantener el estado del submenú
+        let categoriasSubmenuOpen = false;
+
+        window.toggleSubmenu = (submenuId) => {
+            const submenu = document.getElementById(submenuId);
+            categoriasSubmenuOpen = !categoriasSubmenuOpen; // Cambiar el estado
+            submenu.classList.toggle('show');
+            
+            // Cambia el ícono de flecha
+            const toggleButton = document.querySelector(`a[onclick="toggleSubmenu('${submenuId}')"]`);
+            toggleButton.classList.toggle('open');
+        };
+
+        window.keepSubmenuOpen = () => {
+            // Mantener el submenú abierto
+            if (!categoriasSubmenuOpen) {
+                const submenu = document.getElementById('categoriasSubmenu');
+                submenu.classList.add('show');
+                const toggleButton = document.querySelector(`a[onclick="toggleSubmenu('categoriasSubmenu')"]`);
+                toggleButton.classList.add('open');
+                categoriasSubmenuOpen = true; // Actualiza el estado a abierto
+            }
+        };
+
+        window.showContent = (contentId) => {
+            console.log(`Mostrando contenido: ${contentId}`);
+        };
+    </script>
+</body>
+</html>

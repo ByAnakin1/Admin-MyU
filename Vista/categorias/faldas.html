@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administrador</title>
+    <title>Administrador - Faldas</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         :root {
@@ -47,35 +47,6 @@
             background-color: var(--sidebar-hover-bg);
             color: white;
         }
-        #user-info {
-            padding: 1rem;
-            text-align: center;
-        }
-        #user-info img {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            margin-bottom: 0.5rem;
-        }
-        .submenu {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease-out;
-        }
-        .submenu.show {
-            max-height: 1000px;
-        }
-        .submenu .nav-link {
-            padding-left: 2rem;
-        }
-        .category-toggle::after {
-            content: ' ▼';
-            font-size: 0.8em;
-            margin-left: auto;
-        }
-        .category-toggle.open::after {
-            content: ' ▲';
-        }
         #main-content {
             margin-left: 280px;
             padding: 2rem;
@@ -85,9 +56,6 @@
         h1 {
             color: var(--primary-color);
             font-size: 2.5rem;
-        }
-        p {
-            font-size: 1.2rem;
         }
         .btn-primary {
             background-color: var(--primary-color);
@@ -111,81 +79,44 @@
             background-color: var(--primary-color);
             color: white;
         }
-        .modal-content {
-            background-color: white;
-        }
-        .form-control {
-            margin-bottom: 15px;
-        }
     </style>
 </head>
 <body>
     <div id="sidebar" class="text-white">
         <div class="sidebar-logo">MYU WEB</div>
-
-        <div id="user-info">
-            <img src="Imagenes/jefauu.jpg" alt="User">
-            <div>Tay</div>
-            <div class="text-success">• ONLINE</div>
-        </div>
-
         <ul class="nav flex-column">
             <li class="nav-item">
                 <a href="/Vista/productos.html" class="nav-link">🛍️ Productos</a>
             </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link category-toggle" onclick="toggleSubmenu('categoriasSubmenu')">
-                    🏷️ Categorías
-                </a>
-                <ul class="submenu" id="categoriasSubmenu">
-                    <li><a href="/Vista/categorias/vestidos.html" class="nav-link">Vestidos</a></li>
-                    <li><a href="categorias/faldas.html" class="nav-link">Faldas</a></li>
-                    <li><a href="/Vista/categorias/pantalones_shorts.html" class="nav-link">Pantalones y Shorts</a></li>
-                    <li><a href="/Vista/categorias/polos_tops.html" class="nav-link">Polos y Tops</a></li>
-                    <li><a href="/Vista/categorias/poleras_casacas.html" class="nav-link">Poleras y Casacas</a></li>
-                    <li><a href="/Vista/categorias/zapatos_zapatillas.html" class="nav-link">Zapatos y Zapatillas</a></li>
-                    <li><a href="/Vista/categorias/medias_pantys.html" class="nav-link">Medias y Pantys</a></li>
-                    <li>
-                        <a href="#" class="nav-link category-toggle" onclick="toggleSubmenu('accesoriosSubmenu')">
-                            🎒 Accesorios
-                        </a>
-                        <ul class="submenu" id="accesoriosSubmenu">
-                            <li><a href="/Vista/categorias/accesorios/gorras.html" class="nav-link">Gorras</a></li>
-                            <li><a href="/Vista/categorias/accesorios/lentes.html" class="nav-link">Lentes de Sol</a></li>
-                            <li><a href="/Vista/categorias/accesorios/relojes.html" class="nav-link">Relojes</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-            <li class="nav-item">
-                <a href="/Vista/ventas.html" class="nav-link">💰 Ventas</a>
-            </li>
-            <li class="nav-item">
-                <a href="/Vista/reportes.html" class="nav-link">📈 Reportes</a>
-            </li>
+            <!-- Más enlaces de navegación aquí -->
         </ul>
     </div>
 
     <div id="main-content">
-        <h1>MYU - Dashboard</h1>
-        <p>¡Bienvenido al panel de administración!</p>
+        <h1>MYU - Faldas</h1>
+        <p>Administración de productos de la categoría Faldas</p>
 
-        <!-- Botón para abrir el modal de agregar producto -->
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productModal">Agregar Producto</button>
+        <div class="row mb-3">
+            <div class="col-md-2">
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productModal">Agregar Producto</button>
+            </div>
+            <div class="col-md-8">
+                <input type="text" id="searchInput" class="form-control" placeholder="Buscar por ID o Descripción">
+            </div>
+        </div>
 
-        <!-- Tabla de productos -->
         <table class="table mt-3 table-hover">
             <thead>
                 <tr>
                     <th>ID Producto</th>
-                    <th>ID Categoría</th>
+                    <th>Nombre</th>
                     <th>Descripción</th>
                     <th>Precio</th>
                     <th>Imágenes</th>
+                    <th>Stock</th>
                     <th>Talla</th>
                     <th>Colores</th>
-                    <th>Stock</th>
-                    <th>Fecha de Registro</th>
+                    <th>Descuento</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -205,24 +136,35 @@
                 </div>
                 <div class="modal-body">
                     <form id="productForm">
+                        <input type="hidden" id="idProducto">
                         <div class="row">
                             <div class="col-md-6">
-                                <label for="idProducto" class="form-label">ID Producto</label>
-                                <input type="text" class="form-control" id="idProducto" placeholder="ID Producto">
+                                <label for="nombreProducto" class="form-label">Nombre Producto</label>
+                                <input type="text" class="form-control" id="nombreProducto" placeholder="Nombre del producto" required>
                             </div>
                             <div class="col-md-6">
-                                <label for="idCategoria" class="form-label">ID Categoría</label>
-                                <input type="text" class="form-control" id="idCategoria" placeholder="ID Categoría">
+                                <label for="desProducto" class="form-label">Descripción</label>
+                                <input type="text" class="form-control" id="desProducto" placeholder="Descripción" required>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
-                                <label for="desProducto" class="form-label">Descripción</label>
-                                <input type="text" class="form-control" id="desProducto" placeholder="Descripción">
+                                <label for="precio" class="form-label">Precio</label>
+                                <input type="number" class="form-control" id="precio" placeholder="Precio" required>
                             </div>
                             <div class="col-md-6">
-                                <label for="precio" class="form-label">Precio</label>
-                                <input type="number" class="form-control" id="precio" placeholder="Precio">
+                                <label for="stock" class="form-label">Stock</label>
+                                <input type="number" class="form-control" id="stock" placeholder="Stock" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="talla" class="form-label">Talla</label>
+                                <input type="text" class="form-control" id="talla" placeholder="Talla" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="colores" class="form-label">Colores (separados por comas)</label>
+                                <input type="text" class="form-control" id="colores" placeholder="Colores" required>
                             </div>
                         </div>
                         <div class="row">
@@ -245,22 +187,8 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6">
-                                <label for="talla" class="form-label">Talla</label>
-                                <input type="text" class="form-control" id="talla" placeholder="Talla">
-                            </div>
-                            <div class="col-md-6">
-                                <label for="colores" class="form-label">Colores (separados por comas)</label>
-                                <input type="text" class="form-control" id="colores" placeholder="Ejemplo: Rojo, Azul, Verde">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label for="stock" class="form-label">Stock</label>
-                                <input type="number" class="form-control" id="stock" placeholder="Stock">
-                            </div>
-                            <div class="col-md-6">
-                                <label for="fechaRegistro" class="form-label">Fecha de Registro</label>
-                                <input type="date" class="form-control" id="fechaRegistro">
+                                <label for="descuento" class="form-label">Descuento (%)</label>
+                                <input type="number" class="form-control" id="descuento" placeholder="Descuento">
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary mt-3">Guardar Producto</button>
@@ -270,107 +198,7 @@
         </div>
     </div>
 
-    <script>
-        let productos = [];
-
-        // Función para renderizar productos en la tabla
-        function renderProductos() {
-            const productTable = document.getElementById('productTable');
-            productTable.innerHTML = '';
-            productos.forEach((producto, index) => {
-                productTable.innerHTML += `
-                    <tr>
-                        <td>${producto.idProducto}</td>
-                        <td>${producto.idCategoria}</td>
-                        <td>${producto.desProducto}</td>
-                        <td>${producto.precio}</td>
-                        <td>
-                            <img src="${producto.img1}" width="50" alt="img1">
-                            <img src="${producto.img2}" width="50" alt="img2">
-                            <img src="${producto.img3}" width="50" alt="img3">
-                            <img src="${producto.img4}" width="50" alt="img4">
-                        </td>
-                        <td>${producto.talla}</td>
-                        <td>${producto.colores.split(',').map(c => `<span class="badge bg-info">${c}</span>`).join(' ')}</td>
-                        <td>${producto.stock}</td>
-                        <td>${producto.fechaRegistro}</td>
-                        <td>
-                            <button class="btn btn-warning btn-sm" onclick="editProducto(${index})">Editar</button>
-                            <button class="btn btn-danger btn-sm" onclick="deleteProducto(${index})">Eliminar</button>
-                        </td>
-                    </tr>
-                `;
-            });
-        }
-
-        // Función para agregar o editar productos
-        document.getElementById('productForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            
-            const idProducto = document.getElementById('idProducto').value;
-            const idCategoria = document.getElementById('idCategoria').value;
-            const desProducto = document.getElementById('desProducto').value;
-            const precio = document.getElementById('precio').value;
-            const img1 = document.getElementById('img1').value;
-            const img2 = document.getElementById('img2').value;
-            const img3 = document.getElementById('img3').value;
-            const img4 = document.getElementById('img4').value;
-            const talla = document.getElementById('talla').value;
-            const colores = document.getElementById('colores').value; // Colores separados por comas
-            const stock = document.getElementById('stock').value;
-            const fechaRegistro = document.getElementById('fechaRegistro').value;
-
-            const newProducto = { idProducto, idCategoria, desProducto, precio, img1, img2, img3, img4, talla, colores, stock, fechaRegistro };
-
-            if (idProducto) {
-                productos[idProducto] = newProducto;
-            } else {
-                productos.push(newProducto);
-            }
-
-            renderProductos();
-            document.getElementById('productForm').reset();
-            const myModal = new bootstrap.Modal(document.getElementById('productModal'));
-            myModal.hide();
-        });
-
-        // Función para editar producto
-        function editProducto(index) {
-            const producto = productos[index];
-            document.getElementById('idProducto').value = index;
-            document.getElementById('idCategoria').value = producto.idCategoria;
-            document.getElementById('desProducto').value = producto.desProducto;
-            document.getElementById('precio').value = producto.precio;
-            document.getElementById('img1').value = producto.img1;
-            document.getElementById('img2').value = producto.img2;
-            document.getElementById('img3').value = producto.img3;
-            document.getElementById('img4').value = producto.img4;
-            document.getElementById('talla').value = producto.talla;
-            document.getElementById('colores').value = producto.colores;
-            document.getElementById('stock').value = producto.stock;
-            document.getElementById('fechaRegistro').value = producto.fechaRegistro;
-
-            document.getElementById('productModalLabel').textContent = 'Editar Producto';
-            const myModal = new bootstrap.Modal(document.getElementById('productModal'));
-            myModal.show();
-        }
-
-        // Función para eliminar producto
-        function deleteProducto(index) {
-            productos.splice(index, 1);
-            renderProductos();
-        }
-
-        // Controlar la apertura y cierre de submenús
-        document.querySelectorAll('.category-toggle').forEach(toggle => {
-            toggle.addEventListener('click', function() {
-                const submenu = this.nextElementSibling;
-                submenu.classList.toggle('show'); // Mostrar u ocultar el submenu
-                this.classList.toggle('open'); // Cambiar la flecha
-            });
-        });
-    </script>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Enlace al archivo JavaScript -->
+    <script src="../scripts/faldas.js"></script>
 </body>
 </html>

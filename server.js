@@ -1,64 +1,65 @@
+// Importar las dependencias necesarias
 const express = require('express');
 const mysql = require('mysql2');
-const cors = require('cors'); // Asegúrate de habilitar CORS para permitir las solicitudes desde el frontend
+const cors = require('cors');
+
+// Crear la aplicación Express
 const app = express();
 
+// Usar CORS para permitir solicitudes de otros dominios
 app.use(cors());
+
+// Configurar Express para manejar JSON
 app.use(express.json());
 
 // Configuración de la conexión a la base de datos
 const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',      // Cambia 'root' si tu usuario de MySQL es diferente
-    password: '',      // Cambia la contraseña si es necesario
-    database: 'myu_bd' // Asegúrate de que este sea el nombre correcto de tu base de datos
+  host: 'localhost',       // Servidor donde está corriendo la base de datos
+  user: 'root',            // Usuario de la base de datos
+  password: '',            // Contraseña del usuario, por defecto en XAMPP está vacía
+  database: 'myu_bd',      // Nombre de la base de datos que creaste
 });
 
-// Verificar conexión a la base de datos
-db.connect(err => {
-    if (err) {
-        console.error('Error al conectar a la base de datos:', err);
-        return;
-    }
+// Conectar a la base de datos
+db.connect((err) => {
+  if (err) {
+    console.error('Error al conectar a la base de datos:', err.message);
+  } else {
     console.log('Conectado a la base de datos MySQL');
+  }
 });
 
-// Endpoint para obtener productos de la categoría "Faldas" (id_categoria = 3)
-app.get('/api/faldas', (req, res) => {
-    const query = 'SELECT * FROM productos WHERE id_categoria = 3';
-    db.query(query, (err, results) => {
-        if (err) {
-            console.error('Error al obtener productos:', err);
-            res.status(500).json({ error: 'Error al obtener productos' });
-            return;
-        }
-        res.json(results);
+// Ruta para obtener la cantidad de productos por categoría y accesorio
+app.get('/reportes/todos', (req, res) => {
+  const queryCategorias = `
+    SELECT c.nombre_categoria AS nombre, COUNT(p.id_producto) AS cantidad
+    FROM categoria c
+    LEFT JOIN productos p ON c.id_categoria = p.id_categoria
+    GROUP BY c.nombre_categoria
+  `;
+
+  const queryAccesorios = `
+    SELECT ca.nombre_cat_accesorio AS nombre, COUNT(p.id_producto) AS cantidad
+    FROM cat_accesorios ca
+    LEFT JOIN productos p ON ca.id_cat_accesorios = p.id_cat_accesorios
+    GROUP BY ca.nombre_cat_accesorio
+  `;
+
+  db.query(queryCategorias, (err, categoriasResults) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    db.query(queryAccesorios, (err, accesoriosResults) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      res.json({ categorias: categoriasResults, accesorios: accesoriosResults });
     });
-});
-
-// Endpoint para agregar un nuevo producto en la categoría "Faldas"
-app.post('/api/faldas', (req, res) => {
-    const {
-        nombre_producto, des_producto, precio, img1, img2, img3, img4,
-        stock, talla, colores, descuento
-    } = req.body;
-
-    const query = `
-        INSERT INTO productos (id_categoria, nombre_producto, des_producto, precio, img1, img2, img3, img4, stock, talla, colores, descuento) 
-        VALUES (3, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `;
-
-    db.query(query, [nombre_producto, des_producto, precio, img1, img2, img3, img4, stock, talla, colores, descuento], (err) => {
-        if (err) {
-            console.error('Error al insertar producto:', err);
-            res.status(500).json({ error: 'Error al insertar producto' });
-            return;
-        }
-        res.status(201).json({ message: 'Producto agregado con éxito' });
-    });
+  });
 });
 
 // Iniciar el servidor en el puerto 3000
-app.listen(3000, () => {
-    console.log('Servidor corriendo en http://localhost:3000');
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });

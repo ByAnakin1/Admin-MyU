@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administrador - Vestidos</title>
+    <title>Administrador - Zapatos y Zapatillas</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         :root {
@@ -13,22 +13,52 @@
             --text-color: #ecf0f1;
             --primary-color: #2980b9;
         }
-        body, html { height: 100%; margin: 0; }
+        body, html { height: 100%; margin: 0; overflow: hidden; }
         #sidebar {
             background-color: var(--sidebar-bg);
-            width: 280px; height: 100vh;
-            position: fixed; left: 0; top: 0;
-            overflow-y: auto; padding-top: 20px;
+            width: 280px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            overflow-y: auto;
+            padding-top: 20px;
         }
         .sidebar-logo {
-            font-size: 1.8rem; font-weight: bold;
-            color: var(--text-color); padding: 1rem;
-            text-align: center; background-color: var(--primary-color);
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--text-color);
+            padding: 1.5rem;
+            text-align: center;
+            background-color: var(--primary-color);
             margin-bottom: 1rem;
         }
+        #user-info {
+            text-align: center;
+            padding: 1rem;
+        }
+        #user-info img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin-bottom: 0.5rem;
+        }
+        #user-info div {
+            font-size: 1.1rem;
+            color: var(--text-color);
+        }
+        .text-success {
+            font-size: 1rem;
+            margin-top: 0.3rem;
+        }
         .nav-link {
-            color: var(--text-color); padding: 0.8rem 1.5rem;
-            font-size: 1.1rem; display: flex; align-items: center;
+            color: var(--text-color);
+            padding: 0.8rem 1.5rem;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
         }
         .nav-link:hover {
             background-color: var(--sidebar-hover-bg);
@@ -37,27 +67,35 @@
         .submenu {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.5s ease-out;
+            transition: max-height 0.5s ease;
         }
         .submenu.show {
             max-height: 1000px;
         }
         .submenu .nav-link {
-            padding-left: 2rem;
+            padding-left: 2.5rem;
         }
         .category-toggle::after {
             content: ' ▼';
             font-size: 0.8em;
             margin-left: auto;
+            transition: transform 0.3s ease;
         }
         .category-toggle.open::after {
-            content: ' ▲';
+            transform: rotate(180deg);
         }
         #main-content {
-            margin-left: 280px; padding: 2rem;
-            background-color: var(--content-bg); min-height: 100vh;
+            margin-left: 280px;
+            padding: 2rem;
+            background-color: var(--content-bg);
+            min-height: 100vh;
+            overflow-y: auto;
         }
-        h1 { color: var(--primary-color); font-size: 2.5rem; }
+        h1 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            font-weight: 300;
+        }
         .btn-primary {
             background-color: var(--primary-color);
             border-color: var(--primary-color);
@@ -84,25 +122,40 @@
                 <a href="/Vista/productos.html" class="nav-link">🛍️ Productos</a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link category-toggle" onclick="toggleSubmenu('categoriasSubmenu')">
-                    🏷️ Categorías
-                </a>
+                <a href="#" class="nav-link category-toggle" onclick="toggleSubmenu('categoriasSubmenu')">🏷️ Categorías</a>
                 <ul class="submenu" id="categoriasSubmenu">
-                    <li><a href="#" class="nav-link">Vestidos</a></li>
+                    <li><a href="vestidos.html" class="nav-link">Vestidos</a></li>
                     <li><a href="faldas.html" class="nav-link">Faldas</a></li>
                     <li><a href="pantalones_y_shorts.html" class="nav-link">Pantalones y Shorts</a></li>
                     <li><a href="polos_y_tops.html" class="nav-link">Polos y Tops</a></li>
                     <li><a href="poleras_y_casacas.html" class="nav-link">Poleras y Casacas</a></li>
-                    <li><a href="zapatos_y_zapatillas.html" class="nav-link">Zapatos y Zapatillas</a></li>
+                    <li><a href="#" class="nav-link">Zapatos y Zapatillas</a></li>
                     <li><a href="medias_y_pantys.html" class="nav-link">Medias y Pantys</a></li>
-                    <li><a href="carteras_y_mochilas.html" class="nav-link" onclick="keepSubmenuOpen()">Carteras y Mochilas</a></li>
-                    <li><a href="#" class="nav-link category-toggle" onclick="toggleSubmenu('accesoriosSubmenu')">
-                        🎒 Accesorios
-                    </a>
+                    <li><a href="carteras_y_mochilas.html" class="nav-link">Carteras y Mochilas</a></li>
+                    <li><a href="#" class="nav-link category-toggle" onclick="toggleSubmenu('accesoriosSubmenu')">🎒 Accesorios</a>
                         <ul class="submenu" id="accesoriosSubmenu">
-                            <li><a href="/Vista/categorias/accesorios/gorras.html" class="nav-link">Gorras</a></li>
-                            <li><a href="/Vista/categorias/accesorios/lentes.html" class="nav-link">Lentes de Sol</a></li>
-                            <li><a href="/Vista/categorias/accesorios/relojes.html" class="nav-link">Relojes</a></li>
+                            <li><a href="/Vista/categorias/accesorios/gorras.html" class="nav-link">Bucket hat</a></li>
+                            <li><a href="/Vista/categorias/accesorios/lentes.html" class="nav-link">Gorras</a></li>
+                            <li><a href="/Vista/categorias/accesorios/relojes.html" class="nav-link">Lentes</a></li>
+                            <li><a href="/Vista/categorias/accesorios/gorras.html" class="nav-link">Correa</a></li>
+                            <li><a href="/Vista/categorias/accesorios/lentes.html" class="nav-link">Cinturones</a></li>
+                            <li><a href="/Vista/categorias/accesorios/relojes.html" class="nav-link">Cadenas</a></li>
+                            <li><a href="/Vista/categorias/accesorios/gorras.html" class="nav-link">Tirantes</a></li>
+                            <li><a href="/Vista/categorias/accesorios/lentes.html" class="nav-link">Chokers</a></li>
+                            <li><a href="/Vista/categorias/accesorios/relojes.html" class="nav-link">Gargantillas</a></li>
+                            <li><a href="/Vista/categorias/accesorios/gorras.html" class="nav-link">Collares</a></li>
+                            <li><a href="/Vista/categorias/accesorios/lentes.html" class="nav-link">Aretes anime</a></li>
+                            <li><a href="/Vista/categorias/accesorios/relojes.html" class="nav-link">Aretes cute</a></li>
+                            <li><a href="/Vista/categorias/accesorios/gorras.html" class="nav-link">Aretes</a></li>
+                            <li><a href="/Vista/categorias/accesorios/lentes.html" class="nav-link">Arnés</a></li>
+                            <li><a href="/Vista/categorias/accesorios/relojes.html" class="nav-link">Ligeros</a></li>
+                            <li><a href="/Vista/categorias/accesorios/lentes.html" class="nav-link">Vinchas</a></li>
+                            <li><a href="/Vista/categorias/accesorios/relojes.html" class="nav-link">Ganchos</a></li>
+                            <li><a href="/Vista/categorias/accesorios/gorras.html" class="nav-link">Lazos</a></li>
+                            <li><a href="/Vista/categorias/accesorios/lentes.html" class="nav-link">Pines</a></li>
+                            <li><a href="/Vista/categorias/accesorios/relojes.html" class="nav-link">Malla de manos</a></li>
+                            <li><a href="/Vista/categorias/accesorios/lentes.html" class="nav-link">Muñequeras</a></li>
+                            <li><a href="/Vista/categorias/accesorios/relojes.html" class="nav-link">Anillos</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -117,8 +170,8 @@
     </div>
 
     <div id="main-content">
-        <h1>MYU - Vestidos</h1>
-        <p>Administración de productos de la categoría Vestidos</p>
+        <h1>MYU - Zapatos y Zapatillas</h1>
+        <p>Administración de productos de la categoría Zapatos y Zapatillas</p>
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productModal">Agregar Producto</button>
 
         <table class="table mt-3 table-hover">
@@ -220,23 +273,13 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        let categoriasSubmenuOpen = false;
-        let accesoriosSubmenuOpen = false;
-
         function toggleSubmenu(submenuId) {
             const submenu = document.getElementById(submenuId);
-
-            if (submenuId === 'categoriasSubmenu') {
-                categoriasSubmenuOpen = !categoriasSubmenuOpen;
-            } else if (submenuId === 'accesoriosSubmenu') {
-                accesoriosSubmenuOpen = !accesoriosSubmenuOpen;
-            }
-
-            submenu.classList.toggle('show');
+            submenu.classList.toggle("show");
             const toggleButton = document.querySelector(`a[onclick="toggleSubmenu('${submenuId}')"]`);
-            toggleButton.classList.toggle('open');
+            toggleButton.classList.toggle("open");
         }
     </script>
-    <script src="../scripts/vestidos.js"></script>
+    <script src="../scripts/zapatos_y_zapatillas.js"></script>
 </body>
 </html>

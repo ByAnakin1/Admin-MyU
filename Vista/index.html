@@ -16,6 +16,8 @@
         body, html {
             height: 100%;
             margin: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
         }
         #sidebar {
             background-color: var(--sidebar-bg);
@@ -26,15 +28,35 @@
             top: 0;
             overflow-y: auto;
             padding-top: 20px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
         }
         .sidebar-logo {
             font-size: 1.8rem;
             font-weight: bold;
             color: var(--text-color);
-            padding: 1rem;
+            padding: 1.5rem;
             text-align: center;
             background-color: var(--primary-color);
             margin-bottom: 1rem;
+            letter-spacing: 1px;
+        }
+        #user-info {
+            text-align: center;
+            padding: 1rem;
+        }
+        #user-info img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin-bottom: 0.5rem;
+        }
+        #user-info div {
+            font-size: 1.1rem;
+            color: var(--text-color);
+        }
+        .text-success {
+            font-size: 1rem;
+            margin-top: 0.3rem;
         }
         .nav-link {
             color: var(--text-color);
@@ -42,52 +64,48 @@
             font-size: 1.1rem;
             display: flex;
             align-items: center;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
         }
         .nav-link:hover {
             background-color: var(--sidebar-hover-bg);
             color: white;
         }
-        #user-info {
-            padding: 1rem;
-            text-align: center;
-        }
-        #user-info img {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            margin-bottom: 0.5rem;
-        }
         .submenu {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease-out;
+            display: none;
+            padding-left: 1.5rem;
         }
         .submenu.show {
-            max-height: 1000px;
+            display: block;
         }
         .submenu .nav-link {
             padding-left: 2rem;
+            font-size: 1rem;
         }
         .category-toggle::after {
             content: ' ▼';
             font-size: 0.8em;
             margin-left: auto;
+            transition: transform 0.3s ease;
         }
         .category-toggle.open::after {
-            content: ' ▲';
+            transform: rotate(180deg);
         }
         #main-content {
             margin-left: 280px;
             padding: 2rem;
             background-color: var(--content-bg);
             min-height: 100vh;
+            overflow-y: auto;
         }
         h1 {
             color: var(--primary-color);
             font-size: 2.5rem;
+            font-weight: 300;
         }
         p {
             font-size: 1.2rem;
+            color: #555;
         }
     </style>
 </head>
@@ -96,7 +114,7 @@
         <div class="sidebar-logo">MYU WEB</div>
         
         <div id="user-info">
-            <img src="Imagenes/jefauu.jpg" alt="User">
+            <img src="images/jefauu.jpg" alt="User">
             <div>Tay</div>
             <div class="text-success">• ONLINE</div>
         </div>
@@ -106,24 +124,40 @@
                 <a href="/Vista/productos.html" class="nav-link">🛍️ Productos</a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link category-toggle" onclick="toggleSubmenu('categoriasSubmenu')">
-                    🏷️ Categorías
-                </a>
+                <a href="#" class="nav-link category-toggle" onclick="toggleSubmenu('categoriasSubmenu')">🏷️ Categorías</a>
                 <ul class="submenu" id="categoriasSubmenu">
-                    <li><a href="/Vista/categorias/vestidos.html" class="nav-link">Vestidos</a></li>
+                    <li><a href="categorias/vestidos.html" class="nav-link">Vestidos</a></li>
                     <li><a href="categorias/faldas.html" class="nav-link">Faldas</a></li>
-                    <li><a href="/Vista/categorias/pantalones_shorts.html" class="nav-link">Pantalones y Shorts</a></li>
-                    <li><a href="/Vista/categorias/polos_tops.html" class="nav-link">Polos y Tops</a></li>
-                    <li><a href="/Vista/categorias/poleras_casacas.html" class="nav-link">Poleras y Casacas</a></li>
-                    <li><a href="/Vista/categorias/zapatos_zapatillas.html" class="nav-link">Zapatos y Zapatillas</a></li>
-                    <li><a href="/Vista/categorias/medias_pantys.html" class="nav-link">Medias y Pantys</a></li>
-                    <li><a href="#" class="nav-link category-toggle" onclick="toggleSubmenu('accesoriosSubmenu')">
-                        🎒 Accesorios
-                    </a>
+                    <li><a href="categorias/pantalones_y_shorts.html" class="nav-link">Pantalones y Shorts</a></li>
+                    <li><a href="categorias/polos_y_tops.html" class="nav-link">Polos y Tops</a></li>
+                    <li><a href="categorias/poleras_y_casacas.html" class="nav-link">Poleras y Casacas</a></li>
+                    <li><a href="categorias/zapatos_y_zapatillas.html" class="nav-link">Zapatos y Zapatillas</a></li>
+                    <li><a href="categorias/medias_y_pantys.html" class="nav-link">Medias y Pantys</a></li>
+                    <li><a href="categorias/carteras_y_mochilas.html" class="nav-link">Carteras y Mochilas</a></li>
+                    <li><a href="#" class="nav-link category-toggle" onclick="toggleSubmenu('accesoriosSubmenu')">🎒 Accesorios</a>
                         <ul class="submenu" id="accesoriosSubmenu">
-                            <li><a href="/Vista/categorias/accesorios/gorras.html" class="nav-link">Gorras</a></li>
-                            <li><a href="/Vista/categorias/accesorios/lentes.html" class="nav-link">Lentes de Sol</a></li>
-                            <li><a href="/Vista/categorias/accesorios/relojes.html" class="nav-link">Relojes</a></li>
+                            <li><a href="/Vista/categorias/accesorios/gorras.html" class="nav-link">Bucket hat</a></li>
+                            <li><a href="/Vista/categorias/accesorios/lentes.html" class="nav-link">Gorras</a></li>
+                            <li><a href="/Vista/categorias/accesorios/relojes.html" class="nav-link">Lentes</a></li>
+                            <li><a href="/Vista/categorias/accesorios/gorras.html" class="nav-link">Correa</a></li>
+                            <li><a href="/Vista/categorias/accesorios/lentes.html" class="nav-link">Cinturones</a></li>
+                            <li><a href="/Vista/categorias/accesorios/relojes.html" class="nav-link">Cadenas</a></li>
+                            <li><a href="/Vista/categorias/accesorios/gorras.html" class="nav-link">Tirantes</a></li>
+                            <li><a href="/Vista/categorias/accesorios/lentes.html" class="nav-link">Chokers</a></li>
+                            <li><a href="/Vista/categorias/accesorios/relojes.html" class="nav-link">Gargantillas</a></li>
+                            <li><a href="/Vista/categorias/accesorios/gorras.html" class="nav-link">Collares</a></li>
+                            <li><a href="/Vista/categorias/accesorios/lentes.html" class="nav-link">Aretes anime</a></li>
+                            <li><a href="/Vista/categorias/accesorios/relojes.html" class="nav-link">Aretes cute</a></li>
+                            <li><a href="/Vista/categorias/accesorios/gorras.html" class="nav-link">Aretes</a></li>
+                            <li><a href="/Vista/categorias/accesorios/lentes.html" class="nav-link">Arnés</a></li>
+                            <li><a href="/Vista/categorias/accesorios/relojes.html" class="nav-link">Ligeros</a></li>
+                            <li><a href="/Vista/categorias/accesorios/lentes.html" class="nav-link">Vinchas</a></li>
+                            <li><a href="/Vista/categorias/accesorios/relojes.html" class="nav-link">Ganchos</a></li>
+                            <li><a href="/Vista/categorias/accesorios/gorras.html" class="nav-link">Lazos</a></li>
+                            <li><a href="/Vista/categorias/accesorios/lentes.html" class="nav-link">Pines</a></li>
+                            <li><a href="/Vista/categorias/accesorios/relojes.html" class="nav-link">Malla de manos</a></li>
+                            <li><a href="/Vista/categorias/accesorios/lentes.html" class="nav-link">Muñequeras</a></li>
+                            <li><a href="/Vista/categorias/accesorios/relojes.html" class="nav-link">Anillos</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -142,23 +176,13 @@
         <p>¡Bienvenido al panel de administración!</p>
     </div>
 
-    <script type="module">
-        let categoriasSubmenuOpen = false;
-        let accesoriosSubmenuOpen = false;
-
-        window.toggleSubmenu = (submenuId) => {
+    <script>
+        function toggleSubmenu(submenuId) {
             const submenu = document.getElementById(submenuId);
-            
-            if (submenuId === 'categoriasSubmenu') {
-                categoriasSubmenuOpen = !categoriasSubmenuOpen;
-            } else if (submenuId === 'accesoriosSubmenu') {
-                accesoriosSubmenuOpen = !accesoriosSubmenuOpen;
-            }
-            
-            submenu.classList.toggle('show');
+            submenu.classList.toggle("show");
             const toggleButton = document.querySelector(`a[onclick="toggleSubmenu('${submenuId}')"]`);
-            toggleButton.classList.toggle('open');
-        };
+            toggleButton.classList.toggle("open");
+        }
     </script>
 </body>
 </html>

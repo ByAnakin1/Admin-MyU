@@ -13,97 +13,121 @@
             --text-color: #ecf0f1;
             --primary-color: #2980b9;
         }
-        body, html {
-            height: 100%;
-            margin: 0;
-        }
+        body, html { height: 100%; margin: 0; }
         #sidebar {
             background-color: var(--sidebar-bg);
-            width: 280px;
-            height: 100vh;
-            position: fixed;
-            left: 0;
-            top: 0;
-            overflow-y: auto;
-            padding-top: 20px;
+            width: 280px; height: 100vh;
+            position: fixed; left: 0; top: 0;
+            overflow-y: auto; padding-top: 20px;
         }
         .sidebar-logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: var(--text-color);
-            padding: 1rem;
-            text-align: center;
-            background-color: var(--primary-color);
+            font-size: 1.8rem; font-weight: bold;
+            color: var(--text-color); padding: 1rem;
+            text-align: center; background-color: var(--primary-color);
             margin-bottom: 1rem;
         }
         .nav-link {
-            color: var(--text-color);
-            padding: 0.8rem 1.5rem;
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
+            color: var(--text-color); padding: 0.8rem 1.5rem;
+            font-size: 1.1rem; display: flex; align-items: center;
+            transition: background-color 0.3s ease;
         }
         .nav-link:hover {
             background-color: var(--sidebar-hover-bg);
             color: white;
         }
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+        .submenu.show {
+            max-height: 1000px; /* Cambiado para mostrar el submenú */
+        }
+        .submenu .nav-link {
+            padding-left: 2rem;
+        }
+        .category-toggle::after {
+            content: ' ▼';
+            font-size: 0.8em;
+            margin-left: auto;
+            transition: transform 0.3s ease;
+        }
+        .category-toggle.open::after {
+            transform: rotate(180deg);
+        }
         #main-content {
-            margin-left: 280px;
-            padding: 2rem;
-            background-color: var(--content-bg);
-            min-height: 100vh;
+            margin-left: 280px; padding: 2rem;
+            background-color: var(--content-bg); min-height: 100vh;
         }
-        h1 {
-            color: var(--primary-color);
-            font-size: 2.5rem;
-        }
-        .btn-primary {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-            transition: background-color 0.3s ease, transform 0.3s ease;
-        }
-        .btn-primary:hover {
-            background-color: #1abc9c;
-            transform: scale(1.05);
-        }
-        table thead {
-            background-color: var(--primary-color);
-            color: white;
-        }
-        table tbody img {
-            border-radius: 5px;
-            max-width: 50px;
-            max-height: 50px;
-        }
-        .modal-header {
-            background-color: var(--primary-color);
-            color: white;
-        }
+        h1 { color: var(--primary-color); font-size: 2.5rem; }
     </style>
 </head>
 <body>
     <div id="sidebar" class="text-white">
         <div class="sidebar-logo">MYU WEB</div>
+        
+        <div id="user-info">
+            <img src="Imagenes/jefauu.jpg" alt="User">
+            <div>Tay</div>
+            <div class="text-success">• ONLINE</div>
+        </div>
+        
         <ul class="nav flex-column">
             <li class="nav-item">
                 <a href="/Vista/productos.html" class="nav-link">🛍️ Productos</a>
             </li>
-            <!-- Más enlaces de navegación aquí -->
+            <li class="nav-item">
+                <a href="#" class="nav-link category-toggle" onclick="toggleSubmenu('categoriasSubmenu')">🏷️ Categorías</a>
+                <ul class="submenu" id="categoriasSubmenu">
+                    <li><a href="vestidos.html" class="nav-link">Vestidos</a></li>
+                    <li><a href="#" class="nav-link">Faldas</a></li>
+                    <li><a href="pantalones_y_shorts.html" class="nav-link">Pantalones y Shorts</a></li>
+                    <li><a href="polos_y_tops.html" class="nav-link">Polos y Tops</a></li>
+                    <li><a href="poleras_y_casacas.html" class="nav-link">Poleras y Casacas</a></li>
+                    <li><a href="zapatos_y_zapatillas.html" class="nav-link">Zapatos y Zapatillas</a></li>
+                    <li><a href="medias_y_pantys.html" class="nav-link">Medias y Pantys</a></li>
+                    <li><a href="carteras_y_mochilas.html" class="nav-link">Carteras y Mochilas</a></li>
+                    <li><a href="#" class="nav-link category-toggle" onclick="toggleSubmenu('accesoriosSubmenu')">🎒 Accesorios</a>
+                        <ul class="submenu" id="accesoriosSubmenu">
+                            <li><a href="/Vista/categorias/accesorios/gorras.html" class="nav-link">Bucket hat</a></li>
+                            <li><a href="/Vista/categorias/accesorios/lentes.html" class="nav-link">Gorras</a></li>
+                            <li><a href="/Vista/categorias/accesorios/relojes.html" class="nav-link">Lentes</a></li>
+                            <li><a href="/Vista/categorias/accesorios/gorras.html" class="nav-link">Correa</a></li>
+                            <li><a href="/Vista/categorias/accesorios/lentes.html" class="nav-link">Cinturones</a></li>
+                            <li><a href="/Vista/categorias/accesorios/relojes.html" class="nav-link">Cadenas</a></li>
+                            <li><a href="/Vista/categorias/accesorios/gorras.html" class="nav-link">Tirantes</a></li>
+                            <li><a href="/Vista/categorias/accesorios/lentes.html" class="nav-link">Chokers</a></li>
+                            <li><a href="/Vista/categorias/accesorios/relojes.html" class="nav-link">Gargantillas</a></li>
+                            <li><a href="/Vista/categorias/accesorios/gorras.html" class="nav-link">Collares</a></li>
+                            <li><a href="/Vista/categorias/accesorios/lentes.html" class="nav-link">Aretes anime</a></li>
+                            <li><a href="/Vista/categorias/accesorios/relojes.html" class="nav-link">Aretes cute</a></li>
+                            <li><a href="/Vista/categorias/accesorios/gorras.html" class="nav-link">Aretes</a></li>
+                            <li><a href="/Vista/categorias/accesorios/lentes.html" class="nav-link">Arnés</a></li>
+                            <li><a href="/Vista/categorias/accesorios/relojes.html" class="nav-link">Ligeros</a></li>
+                            <li><a href="/Vista/categorias/accesorios/lentes.html" class="nav-link">Vinchas</a></li>
+                            <li><a href="/Vista/categorias/accesorios/relojes.html" class="nav-link">Ganchos</a></li>
+                            <li><a href="/Vista/categorias/accesorios/gorras.html" class="nav-link">Lazos</a></li>
+                            <li><a href="/Vista/categorias/accesorios/lentes.html" class="nav-link">Pines</a></li>
+                            <li><a href="/Vista/categorias/accesorios/relojes.html" class="nav-link">Malla de manos</a></li>
+                            <li><a href="/Vista/categorias/accesorios/lentes.html" class="nav-link">Muñequeras</a></li>
+                            <li><a href="/Vista/categorias/accesorios/relojes.html" class="nav-link">Anillos</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a href="/Vista/ventas.html" class="nav-link">💰 Ventas</a>
+            </li>
+            <li class="nav-item">
+                <a href="/Vista/reportes.html" class="nav-link">📈 Reportes</a>
+            </li>
         </ul>
     </div>
 
     <div id="main-content">
         <h1>MYU - Faldas</h1>
         <p>Administración de productos de la categoría Faldas</p>
-
-        <div class="row mb-3">
-            <div class="col-md-2">
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productModal">Agregar Producto</button>
-            </div>
-            <div class="col-md-8">
-                <input type="text" id="searchInput" class="form-control" placeholder="Buscar por ID o Descripción">
-            </div>
-        </div>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productModal">Agregar Producto</button>
 
         <table class="table mt-3 table-hover">
             <thead>
@@ -117,6 +141,7 @@
                     <th>Talla</th>
                     <th>Colores</th>
                     <th>Descuento</th>
+                    <th>Fecha de Registro</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -131,12 +156,11 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="productModalLabel">Agregar Producto</h5>
+                    <h5 class="modal-title" id="productModalLabel">Editar Producto</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="productForm">
-                        <input type="hidden" id="idProducto">
                         <div class="row">
                             <div class="col-md-6">
                                 <label for="nombreProducto" class="form-label">Nombre Producto</label>
@@ -190,6 +214,10 @@
                                 <label for="descuento" class="form-label">Descuento (%)</label>
                                 <input type="number" class="form-control" id="descuento" placeholder="Descuento">
                             </div>
+                            <div class="col-md-6">
+                                <label for="fechaRegistro" class="form-label">Fecha de Registro</label>
+                                <input type="date" class="form-control" id="fechaRegistro" required>
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-primary mt-3">Guardar Producto</button>
                     </form>
@@ -198,7 +226,15 @@
         </div>
     </div>
 
-    <!-- Enlace al archivo JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleSubmenu(submenuId) {
+            const submenu = document.getElementById(submenuId);
+            submenu.classList.toggle("show");
+            const toggleButton = document.querySelector(`a[onclick="toggleSubmenu('${submenuId}')"]`);
+            toggleButton.classList.toggle("open");
+        }
+    </script>
     <script src="../scripts/faldas.js"></script>
 </body>
 </html>

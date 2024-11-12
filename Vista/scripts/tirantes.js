@@ -1,14 +1,12 @@
 const productTable = document.getElementById('productTable');
 const productForm = document.getElementById('productForm');
-let editingProductId = null; // Almacena el ID del producto en edición
+let editingProductId = null;
 
-// Cargar productos al iniciar la página
 document.addEventListener('DOMContentLoaded', fetchProducts);
 
-// Obtener productos desde el servidor y mostrarlos en la tabla
 async function fetchProducts() {
     try {
-        const res = await fetch('http://localhost:3000/api/faldas');
+        const res = await fetch('http://localhost:3000/api/tirantes');
         if (!res.ok) throw new Error('Error al obtener productos');
         const products = await res.json();
         renderProducts(products);
@@ -17,14 +15,10 @@ async function fetchProducts() {
     }
 }
 
-// Mostrar productos en la tabla con botones de editar y eliminar
-// Mostrar productos en la tabla con botones de editar y eliminar
 function renderProducts(products) {
     productTable.innerHTML = '';
     products.forEach(product => {
-        // Formatear fecha_registro
         const formattedDate = new Date(product.fecha_registro).toLocaleString();
-
         productTable.innerHTML += `
             <tr>
                 <td>${product.id_producto}</td>
@@ -38,10 +32,10 @@ function renderProducts(products) {
                     ${product.img4 ? `<img src="${product.img4}" width="50">` : ''}
                 </td>
                 <td>${product.stock}</td>
-                <td>${product.talla}</td>
-                <td>${product.colores}</td>
-                <td>${product.descuento}</td>
-                <td>${formattedDate}</td> <!-- Mostrar fecha_registro formateada -->
+                <td>${product.talla || ''}</td>
+                <td>${product.colores || ''}</td>
+                <td>${product.descuento || ''}</td>
+                <td>${formattedDate}</td>
                 <td>
                     <button class="btn btn-warning btn-sm" onclick="editProduct(${product.id_producto})">Editar</button>
                     <button class="btn btn-danger btn-sm" onclick="deleteProduct(${product.id_producto})">Eliminar</button>
@@ -50,74 +44,64 @@ function renderProducts(products) {
     });
 }
 
-
-// Función para cargar los datos del producto en el formulario y abrir el modal para edición
 async function editProduct(id) {
     try {
-        const res = await fetch(`http://localhost:3000/api/faldas/${id}`);
+        const res = await fetch(`http://localhost:3000/api/tirantes/${id}`);
         if (!res.ok) throw new Error('Error al obtener datos del producto');
         
         const product = await res.json();
 
-        // Llenar los campos del formulario con los datos del producto
         document.getElementById('nombreProducto').value = product.nombre_producto;
         document.getElementById('desProducto').value = product.descripcion_producto;
         document.getElementById('precio').value = product.precio;
         document.getElementById('stock').value = product.stock;
-        document.getElementById('talla').value = product.talla;
-        document.getElementById('colores').value = product.colores;
-        document.getElementById('descuento').value = product.descuento;
+        document.getElementById('talla').value = product.talla || '';
+        document.getElementById('colores').value = product.colores || '';
+        document.getElementById('descuento').value = product.descuento || '';
         document.getElementById('img1').value = product.img1;
-        document.getElementById('img2').value = product.img2;
-        document.getElementById('img3').value = product.img3;
-        document.getElementById('img4').value = product.img4;
-        document.getElementById('fechaRegistro').value = product.fecha_registro ? product.fecha_registro.split('T')[0] : ''; // Llenar fecha_registro
+        document.getElementById('img2').value = product.img2 || '';
+        document.getElementById('img3').value = product.img3 || '';
+        document.getElementById('img4').value = product.img4 || '';
+        document.getElementById('fechaRegistro').value = product.fecha_registro ? product.fecha_registro.split('T')[0] : '';
 
-        // Guardar el ID del producto que se está editando
         editingProductId = id;
 
-        // Mostrar el modal
         const modalElement = document.getElementById('productModal');
         const modalInstance = new bootstrap.Modal(modalElement);
         modalInstance.show();
     } catch (error) {
         console.error('Error al cargar los datos del producto para editar:', error);
-        alert('Hubo un problema al cargar los datos del producto. Por favor, intenta de nuevo.');
     }
 }
 
-// Manejar la creación o edición de productos cuando se envía el formulario
 productForm.addEventListener('submit', async function (e) {
     e.preventDefault();
 
-    // Crear el objeto con los datos del producto del formulario
     const productData = {
         nombre_producto: document.getElementById('nombreProducto').value,
         descripcion_producto: document.getElementById('desProducto').value,
         precio: parseFloat(document.getElementById('precio').value),
         stock: parseInt(document.getElementById('stock').value),
-        talla: document.getElementById('talla').value,
-        colores: document.getElementById('colores').value,
-        descuento: parseFloat(document.getElementById('descuento').value),
+        talla: document.getElementById('talla').value || null,
+        colores: document.getElementById('colores').value || null,
+        descuento: parseFloat(document.getElementById('descuento').value) || null,
         img1: document.getElementById('img1').value,
-        img2: document.getElementById('img2').value,
-        img3: document.getElementById('img3').value,
-        img4: document.getElementById('img4').value,
-        fecha_registro: document.getElementById('fechaRegistro').value // Añadir fecha_registro
+        img2: document.getElementById('img2').value || null,
+        img3: document.getElementById('img3').value || null,
+        img4: document.getElementById('img4').value || null,
+        fecha_registro: document.getElementById('fechaRegistro').value
     };
 
     try {
         let res;
         if (editingProductId) {
-            // Si estamos editando un producto, envía una solicitud PUT para actualizar
-            res = await fetch(`http://localhost:3000/api/faldas/${editingProductId}`, {
+            res = await fetch(`http://localhost:3000/api/tirantes/${editingProductId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(productData)
             });
         } else {
-            // Si estamos agregando un nuevo producto, envía una solicitud POST
-            res = await fetch('http://localhost:3000/api/faldas', {
+            res = await fetch('http://localhost:3000/api/tirantes', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(productData)
@@ -126,10 +110,7 @@ productForm.addEventListener('submit', async function (e) {
 
         if (!res.ok) throw new Error(editingProductId ? 'Error al actualizar el producto' : 'Error al agregar el producto');
 
-        // Recargar la lista de productos después de agregar o editar
         fetchProducts();
-
-        // Limpiar el formulario, cerrar el modal y restablecer el estado de edición
         productForm.reset();
         const modalElement = document.getElementById('productModal');
         const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
@@ -137,25 +118,21 @@ productForm.addEventListener('submit', async function (e) {
         editingProductId = null;
     } catch (error) {
         console.error('Error al guardar el producto:', error);
-        alert('Hubo un error al guardar el producto. Por favor, intenta de nuevo.');
     }
 });
 
-// Función para eliminar un producto
 async function deleteProduct(id) {
     if (confirm('¿Estás seguro de que deseas eliminar este producto?')) {
         try {
-            const res = await fetch(`http://localhost:3000/api/faldas/${id}`, {
+            const res = await fetch(`http://localhost:3000/api/tirantes/${id}`, {
                 method: 'DELETE'
             });
 
             if (!res.ok) throw new Error('Error al eliminar el producto');
 
-            // Recargar la lista de productos después de eliminar uno
             fetchProducts();
         } catch (error) {
             console.error('Error al eliminar el producto:', error);
-            alert('Hubo un error al eliminar el producto. Por favor, intenta de nuevo.');
         }
     }
 }

@@ -26,6 +26,20 @@
             text-align: center; background-color: var(--primary-color);
             margin-bottom: 1rem;
         }
+        #user-info {
+            text-align: center;
+            padding: 1rem;
+        }
+        #user-info img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin-bottom: 0.5rem;
+        }
+        #user-info div {
+            font-size: 1.1rem;
+            color: var(--text-color);
+        }
         .nav-link {
             color: var(--text-color); padding: 0.8rem 1.5rem;
             font-size: 1.1rem; display: flex; align-items: center;
@@ -35,15 +49,15 @@
             color: white;
         }
         .submenu {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease-out;
+            display: none;
+            padding-left: 1.5rem;
         }
         .submenu.show {
-            max-height: 1000px;
+            display: block;
         }
         .submenu .nav-link {
             padding-left: 2rem;
+            font-size: 1rem;
         }
         .category-toggle::after {
             content: ' ▼';
@@ -74,35 +88,55 @@
         <div class="sidebar-logo">MYU WEB</div>
         
         <div id="user-info">
-            <img src="Imagenes/jefauu.jpg" alt="User">
+            <img src="../images/jefauu.jpg" alt="User">
             <div>Tay</div>
             <div class="text-success">• ONLINE</div>
         </div>
         
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a href="/Vista/productos.html" class="nav-link">🛍️ Productos</a>
+                <a href="../productos.html" class="nav-link">🛍️ Productos</a>
             </li>
             <li class="nav-item">
                 <a href="#" class="nav-link category-toggle" onclick="toggleSubmenu('categoriasSubmenu')">
                     🏷️ Categorías
                 </a>
                 <ul class="submenu" id="categoriasSubmenu">
-                    <li><a href="vestidos.html" class="nav-link">Vestidos</a></li>
-                    <li><a href="faldas.html" class="nav-link">Faldas</a></li>
-                    <li><a href="#" class="nav-link">Pantalones y Shorts</a></li>
-                    <li><a href="polos_y_tops.html" class="nav-link">Polos y Tops</a></li>
-                    <li><a href="poleras_y_casacas.html" class="nav-link">Poleras y Casacas</a></li>
-                    <li><a href="zapatos_y_zapatillas.html" class="nav-link">Zapatos y Zapatillas</a></li>
-                    <li><a href="medias_y_pantys.html" class="nav-link">Medias y Pantys</a></li>
-                    <li><a href="carteras_y_mochilas.html" class="nav-link" onclick="keepSubmenuOpen()">Carteras y Mochilas</a></li>
-                    <li><a href="#" class="nav-link category-toggle" onclick="toggleSubmenu('accesoriosSubmenu')">
-                        🎒 Accesorios
-                    </a>
+                    <li><a href="../categorias/vestidos.html" class="nav-link">Vestidos</a></li>
+                    <li><a href="../categorias/faldas.html" class="nav-link">Faldas</a></li>
+                    <li><a href="../categorias/pantalones_y_shorts.html" class="nav-link">Pantalones y Shorts</a></li>
+                    <li><a href="../categorias/polos_y_tops.html" class="nav-link">Polos y Tops</a></li>
+                    <li><a href="../categorias/poleras_y_casacas.html" class="nav-link">Poleras y Casacas</a></li>
+                    <li><a href="../categorias/zapatos_y_zapatillas.html" class="nav-link">Zapatos y Zapatillas</a></li>
+                    <li><a href="../categorias/medias_y_pantys.html" class="nav-link">Medias y Pantys</a></li>
+                    <li><a href="../categorias/carteras_y_mochilas.html" class="nav-link">Carteras y Mochilas</a></li>
+                    <li>
+                        <a href="#" class="nav-link category-toggle" onclick="toggleSubmenu('accesoriosSubmenu')">
+                            🎒 Accesorios
+                        </a>
                         <ul class="submenu" id="accesoriosSubmenu">
-                            <li><a href="/Vista/categorias/accesorios/gorras.html" class="nav-link">Gorras</a></li>
-                            <li><a href="/Vista/categorias/accesorios/lentes.html" class="nav-link">Lentes de Sol</a></li>
-                            <li><a href="/Vista/categorias/accesorios/relojes.html" class="nav-link">Relojes</a></li>
+                            <li><a href="../Accesorios/bucket_hat.html" class="nav-link">Bucket hat</a></li>
+                            <li><a href="../Accesorios/gorras.html" class="nav-link">Gorras</a></li>
+                            <li><a href="../Accesorios/lentes.html" class="nav-link">Lentes</a></li>
+                            <li><a href="../Accesorios/correa.html" class="nav-link">Correa</a></li>
+                            <li><a href="../Accesorios/cinturones.html" class="nav-link">Cinturones</a></li>
+                            <li><a href="../Accesorios/cadenas.html" class="nav-link">Cadenas</a></li>
+                            <li><a href="../Accesorios/tirantes.html" class="nav-link">Tirantes</a></li>
+                            <li><a href="../Accesorios/chokers.html" class="nav-link">Chokers</a></li>
+                            <li><a href="../Accesorios/gargantillas.html" class="nav-link">Gargantillas</a></li>
+                            <li><a href="../Accesorios/collares.html" class="nav-link">Collares</a></li>
+                            <li><a href="../Accesorios/aretes_anime.html" class="nav-link">Aretes anime</a></li>
+                            <li><a href="../Accesorios/aretes_cute.html" class="nav-link">Aretes cute</a></li>
+                            <li><a href="../Accesorios/aretes.html" class="nav-link">Aretes</a></li>
+                            <li><a href="../Accesorios/arnes.html" class="nav-link">Arnés</a></li>
+                            <li><a href="../Accesorios/ligeros.html" class="nav-link">Ligeros</a></li>
+                            <li><a href="../Accesorios/vinchas.html" class="nav-link">Vinchas</a></li>
+                            <li><a href="../Accesorios/ganchos.html" class="nav-link">Ganchos</a></li>
+                            <li><a href="../Accesorios/lazos.html" class="nav-link">Lazos</a></li>
+                            <li><a href="../Accesorios/pines.html" class="nav-link">Pines</a></li>
+                            <li><a href="../Accesorios/malla_de_manos.html" class="nav-link">Malla de manos</a></li>
+                            <li><a href="../Accesorios/muñequeras.html" class="nav-link">Muñequeras</a></li>
+                            <li><a href="../Accesorios/anillos.html" class="nav-link">Anillos</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -111,7 +145,24 @@
                 <a href="/Vista/ventas.html" class="nav-link">💰 Ventas</a>
             </li>
             <li class="nav-item">
-                <a href="/Vista/reportes.html" class="nav-link">📈 Reportes</a>
+                <a href="../reportes.html" class="nav-link">📈 Reportes</a>
+            </li>
+        
+            <!-- New sections for Banners, Tiktoks, Orders, Rejected Products, and Accepted Products -->
+            <li class="nav-item">
+                <a href="../banners.html" class="nav-link">📢 Banners</a>
+            </li>
+            <li class="nav-item">
+                <a href="../tiktoks.html" class="nav-link">🎬 Tiktoks</a>
+            </li>
+            <li class="nav-item">
+                <a href="../ordenes.html" class="nav-link">📝 Órdenes</a>
+            </li>
+            <li class="nav-item">
+                <a href="../productos_rechazados.html" class="nav-link">❌ Productos Rechazados</a>
+            </li>
+            <li class="nav-item">
+                <a href="../productos_aceptados.html" class="nav-link">✔️ Productos Aceptados</a>
             </li>
         </ul>
     </div>

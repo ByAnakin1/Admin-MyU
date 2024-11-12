@@ -3,17 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administrador</title>
+    <title>Administrador - Reportes</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --sidebar-bg: #2c3e50;
-            --header-bg: #2c3e50;
-            --pink: #e83e8c;
-            --hover-bg: rgba(232, 62, 140, 0.5);
+            --sidebar-bg: #34495e;
+            --sidebar-hover-bg: #1abc9c;
+            --content-bg: #ecf0f1;
+            --text-color: #ecf0f1;
+            --primary-color: #2980b9;
         }
         body, html {
             height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
         }
         #sidebar {
             background-color: var(--sidebar-bg);
@@ -23,125 +27,245 @@
             left: 0;
             top: 0;
             overflow-y: auto;
+            padding-top: 20px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
         }
         .sidebar-logo {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: bold;
-            color: white;
-            padding: 1rem;
-        }
-        .nav-link {
-            color: white;
-            padding: 0.5rem 1rem;
-        }
-        .nav-link:hover {
-            background-color: var(--hover-bg);
+            color: var(--text-color);
+            padding: 1.5rem;
+            text-align: center;
+            background-color: var(--primary-color);
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
         }
         #user-info {
-            padding: 1rem;
             text-align: center;
+            padding: 1rem;
         }
         #user-info img {
-            width: 100px;
-            height: 100px;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
             margin-bottom: 0.5rem;
         }
+        #user-info div {
+            font-size: 1.1rem;
+            color: var(--text-color);
+        }
+        .text-success {
+            font-size: 1rem;
+            margin-top: 0.3rem;
+        }
+        .nav-link {
+            color: var(--text-color);
+            padding: 0.8rem 1.5rem;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .nav-link:hover {
+            background-color: var(--sidebar-hover-bg);
+            color: white;
+        }
         .submenu {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out;
+            display: none;
+            padding-left: 1.5rem;
         }
         .submenu.show {
-            max-height: 500px; /* Ajuste suficiente para mostrar las opciones */
+            display: block;
         }
         .submenu .nav-link {
             padding-left: 2rem;
+            font-size: 1rem;
         }
         .category-toggle::after {
             content: ' ▼';
             font-size: 0.8em;
+            margin-left: auto;
+            transition: transform 0.3s ease;
         }
         .category-toggle.open::after {
-            content: ' ▲';
+            transform: rotate(180deg);
         }
         #main-content {
             margin-left: 280px;
             padding: 2rem;
+            background-color: var(--content-bg);
+            height: 100vh; /* Cambiado de min-height */
+            overflow-y: auto; /* Agregado para permitir desplazamiento */
+        }
+        h2 {
+            color: #2980b9;
+            font-size: 2.5rem;
+            font-weight: 300;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        .table thead {
+            background-color: #2980b9;
+            color: white;
+        }
+        .summary-box {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        canvas {
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
+    <!-- Sidebar de Navegación -->
     <div id="sidebar" class="text-white">
         <div class="sidebar-logo">MYU WEB</div>
-        
         <div id="user-info">
-            <img src="Imagenes/jefauu.jpg" alt="User">
+            <img src="images/jefauu.jpg" alt="User">
             <div>Tay</div>
             <div class="text-success">• ONLINE</div>
         </div>
-        
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a href="/Vista/productos.html" class="nav-link" onclick="showContent('productos')">🛍️ Productos</a>
+                <a href="../productos.html" class="nav-link">🛍️ Productos</a>
             </li>
             <li class="nav-item">
                 <a href="#" class="nav-link category-toggle" onclick="toggleSubmenu('categoriasSubmenu')">
                     🏷️ Categorías
                 </a>
                 <ul class="submenu" id="categoriasSubmenu">
-                    <li><a href="../Vista/categorias/vestidos.html" class="nav-link" onclick="keepSubmenuOpen()">Vestidos</a></li>
-                    <li><a href="../Vista/categorias/faldas.html" class="nav-link" onclick="keepSubmenuOpen()">Faldas</a></li>
-                    <li><a href="../Vista/categorias/pantalones_shorts.html" class="nav-link" onclick="keepSubmenuOpen()">Pantalones y Shorts</a></li>
-                    <li><a href="../Vista/categorias/polos_tops.html" class="nav-link" onclick="keepSubmenuOpen()">Polos y Tops</a></li>
-                    <li><a href="../Vista/categorias/poleras_casacas.html" class="nav-link" onclick="keepSubmenuOpen()">Poleras y Casacas</a></li>
-                    <li><a href="../Vista/categorias/zapatos_zapatillas.html" class="nav-link" onclick="keepSubmenuOpen()">Zapatos y Zapatillas</a></li>
-                    <li><a href="../Vista/categorias/medias_pantys.html" class="nav-link" onclick="keepSubmenuOpen()">Medias y Pantys</a></li>
-                    <li><a href="../Vista/categorias/carteras_mochilas.html" class="nav-link" onclick="keepSubmenuOpen()">Carteras y Mochilas</a></li>
+                    <li><a href="../categorias/vestidos.html" class="nav-link">Vestidos</a></li>
+                    <li><a href="../categorias/faldas.html" class="nav-link">Faldas</a></li>
+                    <li><a href="../categorias/pantalones_y_shorts.html" class="nav-link">Pantalones y Shorts</a></li>
+                    <li><a href="../categorias/polos_y_tops.html" class="nav-link">Polos y Tops</a></li>
+                    <li><a href="../categorias/poleras_y_casacas.html" class="nav-link">Poleras y Casacas</a></li>
+                    <li><a href="../categorias/zapatos_y_zapatillas.html" class="nav-link">Zapatos y Zapatillas</a></li>
+                    <li><a href="../categorias/medias_y_pantys.html" class="nav-link">Medias y Pantys</a></li>
+                    <li><a href="../categorias/carteras_y_mochilas.html" class="nav-link">Carteras y Mochilas</a></li>
+                    <li>
+                        <a href="#" class="nav-link category-toggle" onclick="toggleSubmenu('accesoriosSubmenu')">
+                            🎒 Accesorios
+                        </a>
+                        <ul class="submenu" id="accesoriosSubmenu">
+                            <li><a href="../Accesorios/bucket_hat.html" class="nav-link">Bucket hat</a></li>
+                            <li><a href="../Accesorios/gorras.html" class="nav-link">Gorras</a></li>
+                            <li><a href="../Accesorios/lentes.html" class="nav-link">Lentes</a></li>
+                            <li><a href="../Accesorios/correa.html" class="nav-link">Correa</a></li>
+                            <li><a href="../Accesorios/cinturones.html" class="nav-link">Cinturones</a></li>
+                            <li><a href="../Accesorios/cadenas.html" class="nav-link">Cadenas</a></li>
+                            <li><a href="../Accesorios/tirantes.html" class="nav-link">Tirantes</a></li>
+                            <li><a href="../Accesorios/chokers.html" class="nav-link">Chokers</a></li>
+                            <li><a href="../Accesorios/gargantillas.html" class="nav-link">Gargantillas</a></li>
+                            <li><a href="../Accesorios/collares.html" class="nav-link">Collares</a></li>
+                            <li><a href="../Accesorios/aretes_anime.html" class="nav-link">Aretes anime</a></li>
+                            <li><a href="../Accesorios/aretes_cute.html" class="nav-link">Aretes cute</a></li>
+                            <li><a href="../Accesorios/aretes.html" class="nav-link">Aretes</a></li>
+                            <li><a href="../Accesorios/arnes.html" class="nav-link">Arnés</a></li>
+                            <li><a href="../Accesorios/ligeros.html" class="nav-link">Ligeros</a></li>
+                            <li><a href="../Accesorios/vinchas.html" class="nav-link">Vinchas</a></li>
+                            <li><a href="../Accesorios/ganchos.html" class="nav-link">Ganchos</a></li>
+                            <li><a href="../Accesorios/lazos.html" class="nav-link">Lazos</a></li>
+                            <li><a href="../Accesorios/pines.html" class="nav-link">Pines</a></li>
+                            <li><a href="../Accesorios/malla_de_manos.html" class="nav-link">Malla de manos</a></li>
+                            <li><a href="../Accesorios/muñequeras.html" class="nav-link">Muñequeras</a></li>
+                            <li><a href="../Accesorios/anillos.html" class="nav-link">Anillos</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </li>
             <li class="nav-item">
-                <a href="/Vista/ventas.html" class="nav-link" onclick="showContent('ventas')">💰 Ventas</a>
+                <a href="/Vista/ventas.html" class="nav-link">💰 Ventas</a>
             </li>
             <li class="nav-item">
-                <a href="/Vista/reportes.html" class="nav-link" onclick="showContent('reportes')">📈 Reportes</a>
+                <a href="../reportes.html" class="nav-link">📈 Reportes</a>
+            </li>
+        
+            <!-- New sections for Banners, Tiktoks, Orders, Rejected Products, and Accepted Products -->
+            <li class="nav-item">
+                <a href="../banners.html" class="nav-link">📢 Banners</a>
+            </li>
+            <li class="nav-item">
+                <a href="../tiktoks.html" class="nav-link">🎬 Tiktoks</a>
+            </li>
+            <li class="nav-item">
+                <a href="../ordenes.html" class="nav-link">📝 Órdenes</a>
+            </li>
+            <li class="nav-item">
+                <a href="../productos_rechazados.html" class="nav-link">❌ Productos Rechazados</a>
+            </li>
+            <li class="nav-item">
+                <a href="../productos_aceptados.html" class="nav-link">✔️ Productos Aceptados</a>
             </li>
         </ul>
     </div>
 
+    <!-- Contenido Principal -->
     <div id="main-content">
-        <h1>MYU - Dashboard</h1>
-        <p>¡Bienvenido al panel de administracion!</p>
+        <div class="container">
+            <h2>Reporte: Cantidad de Productos por Categoría y Accesorio</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <h3>Tabla de productos por categoría</h3>
+                    <table id="tablaCategorias" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Categoría</th>
+                                <th>Cantidad de productos</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    <div class="summary-box text-center">
+                        <h5>Resumen de Inventario</h5>
+                        <p><strong>Total de Categorías:</strong> <span id="totalCategorias"></span></p>
+                        <p><strong>Total de Productos en Categorías:</strong> <span id="totalProductosCategorias"></span></p>
+                        <p><strong>Total de Accesorios:</strong> <span id="totalAccesorios"></span></p>
+                        <p><strong>Total de Productos en Accesorios:</strong> <span id="totalProductosAccesorios"></span></p>
+                        <p><strong>Última Actualización:</strong> <span id="lastUpdate"></span></p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h3>Tabla de productos por accesorio</h3>
+                    <table id="tablaAccesorios" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Accesorio</th>
+                                <th>Cantidad de productos</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <h3>Gráfico de categorías</h3>
+                    <canvas id="productosChartCategorias" width="400" height="400"></canvas>
+                </div>
+                <div class="col-md-6">
+                    <h3>Gráfico de accesorios</h3>
+                    <canvas id="productosPizza" width="400" height="400"></canvas>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <script type="module">
-        // Variable para mantener el estado del submenú
-        let categoriasSubmenuOpen = false;
-
-        window.toggleSubmenu = (submenuId) => {
+    <script>
+        function toggleSubmenu(submenuId) {
             const submenu = document.getElementById(submenuId);
-            categoriasSubmenuOpen = !categoriasSubmenuOpen; // Cambiar el estado
-            submenu.classList.toggle('show');
-            
-            // Cambia el ícono de flecha
+            submenu.classList.toggle("show");
             const toggleButton = document.querySelector(`a[onclick="toggleSubmenu('${submenuId}')"]`);
-            toggleButton.classList.toggle('open');
-        };
-
-        window.keepSubmenuOpen = () => {
-            // Mantener el submenú abierto
-            if (!categoriasSubmenuOpen) {
-                const submenu = document.getElementById('categoriasSubmenu');
-                submenu.classList.add('show');
-                const toggleButton = document.querySelector(`a[onclick="toggleSubmenu('categoriasSubmenu')"]`);
-                toggleButton.classList.add('open');
-                categoriasSubmenuOpen = true; // Actualiza el estado a abierto
-            }
-        };
-
-        window.showContent = (contentId) => {
-            console.log(`Mostrando contenido: ${contentId}`);
-        };
+            toggleButton.classList.toggle("open");
+        }
     </script>
+    <script src="scripts/reportes.js"></script>
 </body>
 </html>

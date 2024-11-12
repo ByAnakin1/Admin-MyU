@@ -26,7 +26,7 @@ function renderProducts(products) {
             <tr>
                 <td>${product.id_producto}</td>
                 <td>${product.nombre_producto}</td>
-                <td>${product.des_producto}</td>
+                <td>${product.descripcion_producto}</td>
                 <td>${product.precio}</td>
                 <td>
                     <img src="${product.img1}" width="50">

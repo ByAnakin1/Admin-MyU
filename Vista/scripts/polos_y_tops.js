@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', fetchProducts);
 // Obtener productos desde el servidor y mostrarlos en la tabla
 async function fetchProducts() {
     try {
-        const res = await fetch('http://localhost:3000/api/faldas');
+        const res = await fetch('http://localhost:3000/api/polos_y_tops'); // Cambiado a la ruta correcta de polos y tops
         if (!res.ok) throw new Error('Error al obtener productos');
         const products = await res.json();
         renderProducts(products);
@@ -18,13 +18,10 @@ async function fetchProducts() {
 }
 
 // Mostrar productos en la tabla con botones de editar y eliminar
-// Mostrar productos en la tabla con botones de editar y eliminar
 function renderProducts(products) {
     productTable.innerHTML = '';
     products.forEach(product => {
-        // Formatear fecha_registro
         const formattedDate = new Date(product.fecha_registro).toLocaleString();
-
         productTable.innerHTML += `
             <tr>
                 <td>${product.id_producto}</td>
@@ -41,7 +38,7 @@ function renderProducts(products) {
                 <td>${product.talla}</td>
                 <td>${product.colores}</td>
                 <td>${product.descuento}</td>
-                <td>${formattedDate}</td> <!-- Mostrar fecha_registro formateada -->
+                <td>${formattedDate}</td>
                 <td>
                     <button class="btn btn-warning btn-sm" onclick="editProduct(${product.id_producto})">Editar</button>
                     <button class="btn btn-danger btn-sm" onclick="deleteProduct(${product.id_producto})">Eliminar</button>
@@ -50,18 +47,17 @@ function renderProducts(products) {
     });
 }
 
-
 // Función para cargar los datos del producto en el formulario y abrir el modal para edición
 async function editProduct(id) {
     try {
-        const res = await fetch(`http://localhost:3000/api/faldas/${id}`);
+        const res = await fetch(`http://localhost:3000/api/polos_y_tops/${id}`); // Cambiado a la ruta correcta de polos y tops
         if (!res.ok) throw new Error('Error al obtener datos del producto');
         
         const product = await res.json();
 
         // Llenar los campos del formulario con los datos del producto
         document.getElementById('nombreProducto').value = product.nombre_producto;
-        document.getElementById('desProducto').value = product.descripcion_producto;
+        document.getElementById('desProducto').value = product.des_producto;
         document.getElementById('precio').value = product.precio;
         document.getElementById('stock').value = product.stock;
         document.getElementById('talla').value = product.talla;
@@ -71,12 +67,10 @@ async function editProduct(id) {
         document.getElementById('img2').value = product.img2;
         document.getElementById('img3').value = product.img3;
         document.getElementById('img4').value = product.img4;
-        document.getElementById('fechaRegistro').value = product.fecha_registro ? product.fecha_registro.split('T')[0] : ''; // Llenar fecha_registro
+        document.getElementById('fechaRegistro').value = product.fecha_registro ? product.fecha_registro.split('T')[0] : '';
 
-        // Guardar el ID del producto que se está editando
         editingProductId = id;
 
-        // Mostrar el modal
         const modalElement = document.getElementById('productModal');
         const modalInstance = new bootstrap.Modal(modalElement);
         modalInstance.show();
@@ -93,7 +87,7 @@ productForm.addEventListener('submit', async function (e) {
     // Crear el objeto con los datos del producto del formulario
     const productData = {
         nombre_producto: document.getElementById('nombreProducto').value,
-        descripcion_producto: document.getElementById('desProducto').value,
+        des_producto: document.getElementById('desProducto').value,
         precio: parseFloat(document.getElementById('precio').value),
         stock: parseInt(document.getElementById('stock').value),
         talla: document.getElementById('talla').value,
@@ -103,21 +97,21 @@ productForm.addEventListener('submit', async function (e) {
         img2: document.getElementById('img2').value,
         img3: document.getElementById('img3').value,
         img4: document.getElementById('img4').value,
-        fecha_registro: document.getElementById('fechaRegistro').value // Añadir fecha_registro
+        fecha_registro: document.getElementById('fechaRegistro').value
     };
 
     try {
         let res;
         if (editingProductId) {
             // Si estamos editando un producto, envía una solicitud PUT para actualizar
-            res = await fetch(`http://localhost:3000/api/faldas/${editingProductId}`, {
+            res = await fetch(`http://localhost:3000/api/polos_y_tops/${editingProductId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(productData)
             });
         } else {
             // Si estamos agregando un nuevo producto, envía una solicitud POST
-            res = await fetch('http://localhost:3000/api/faldas', {
+            res = await fetch('http://localhost:3000/api/polos_y_tops', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(productData)
@@ -145,7 +139,7 @@ productForm.addEventListener('submit', async function (e) {
 async function deleteProduct(id) {
     if (confirm('¿Estás seguro de que deseas eliminar este producto?')) {
         try {
-            const res = await fetch(`http://localhost:3000/api/faldas/${id}`, {
+            const res = await fetch(`http://localhost:3000/api/polos_y_tops/${id}`, {
                 method: 'DELETE'
             });
 
@@ -159,3 +153,4 @@ async function deleteProduct(id) {
         }
     }
 }
+

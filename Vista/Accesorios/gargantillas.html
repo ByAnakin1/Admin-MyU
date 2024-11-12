@@ -147,7 +147,6 @@
             <li class="nav-item">
                 <a href="../reportes.html" class="nav-link">📈 Reportes</a>
             </li>
-        
             <!-- New sections for Banners, Tiktoks, Orders, Rejected Products, and Accepted Products -->
             <li class="nav-item">
                 <a href="../banners.html" class="nav-link">📢 Banners</a>
@@ -165,17 +164,18 @@
                 <a href="../productos_aceptados.html" class="nav-link">✔️ Productos Aceptados</a>
             </li>
         </ul>
+        
     </div>
 
     <div id="main-content">
-        <h1>MYU - Vestidos</h1>
-        <p>Administración de productos de la categoría Vestidos</p>
+        <h1>MYU - Gargantillas</h1>
+        <p>Administración de productos de la categoría Gargantillas</p>
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productModal">Agregar Producto</button>
 
         <table class="table mt-3 table-hover">
             <thead>
                 <tr>
-                    <th>ID Producto</th>
+                    <th>ID Accesorio</th>
                     <th>Nombre</th>
                     <th>Descripción</th>
                     <th>Precio</th>
@@ -199,7 +199,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="productModalLabel">Editar Producto</h5>
+                    <h5 class="modal-title" id="productModalLabel">Agregar producto</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -227,21 +227,21 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <label for="talla" class="form-label">Talla</label>
-                                <input type="text" class="form-control" id="talla" placeholder="Talla" required>
+                                <input type="text" class="form-control" id="talla" placeholder="Talla">
                             </div>
                             <div class="col-md-6">
                                 <label for="colores" class="form-label">Colores (separados por comas)</label>
-                                <input type="text" class="form-control" id="colores" placeholder="Colores" required>
+                                <input type="text" class="form-control" id="colores" placeholder="Colores">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-3">
                                 <label for="img1" class="form-label">Imagen 1 (URL)</label>
-                                <input type="text" class="form-control" id="img1" placeholder="URL Imagen 1">
+                                <input type="text" class="form-control" id="img1" placeholder="URL Imagen 1" required>
                             </div>
                             <div class="col-md-3">
                                 <label for="img2" class="form-label">Imagen 2 (URL)</label>
-                                <input type="text" class="form-control" id="img2" placeholder="URL Imagen 2">
+                                <input type="text" class="form-control" id="img2" placeholder="URL Imagen 2" required>
                             </div>
                             <div class="col-md-3">
                                 <label for="img3" class="form-label">Imagen 3 (URL)</label>
@@ -281,6 +281,6 @@
             toggleButton.classList.toggle('open');
         }
     </script>
-    <script src="../scripts/vestidos.js"></script>
+    <script src="../scripts/gargantillas.js"></script>
 </body>
 </html>

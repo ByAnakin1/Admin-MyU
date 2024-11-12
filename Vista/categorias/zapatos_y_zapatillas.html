@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administrador - Reportes</title>
+    <title>Administrador - Zapatos y Zapatillas</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --sidebar-bg: #34495e;
@@ -14,11 +13,7 @@
             --text-color: #ecf0f1;
             --primary-color: #2980b9;
         }
-        body, html {
-            height: 100%;
-            margin: 0;
-            font-family: Arial, sans-serif;
-        }
+        body, html { height: 100%; margin: 0; overflow: hidden; }
         #sidebar {
             background-color: var(--sidebar-bg);
             width: 280px;
@@ -28,7 +23,6 @@
             top: 0;
             overflow-y: auto;
             padding-top: 20px;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
         }
         .sidebar-logo {
             font-size: 1.8rem;
@@ -38,7 +32,6 @@
             text-align: center;
             background-color: var(--primary-color);
             margin-bottom: 1rem;
-            letter-spacing: 1px;
         }
         #user-info {
             text-align: center;
@@ -95,44 +88,35 @@
             margin-left: 280px;
             padding: 2rem;
             background-color: var(--content-bg);
-            height: 100vh; /* Cambiado de min-height */
-            overflow-y: auto; /* Agregado para permitir desplazamiento */
+            min-height: 100vh;
+            overflow-y: auto;
         }
-        h2 {
-            color: #2980b9;
+        h1 {
+            color: var(--primary-color);
             font-size: 2.5rem;
             font-weight: 300;
         }
-        .container {
-            background-color: #fff;
-            padding: 20px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            transition: background-color 0.3s ease, transform 0.3s ease;
         }
-        .table thead {
-            background-color: #2980b9;
-            color: white;
-        }
-        .summary-box {
-            background-color: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
-        }
-        canvas {
-            margin-top: 20px;
-        }
+        .btn-primary:hover { background-color: #1abc9c; transform: scale(1.05); }
+        table thead { background-color: var(--primary-color); color: white; }
+        table tbody img { border-radius: 5px; max-width: 50px; max-height: 50px; }
+        .modal-header { background-color: var(--primary-color); color: white; }
     </style>
 </head>
 <body>
-    <!-- Sidebar de Navegación -->
     <div id="sidebar" class="text-white">
         <div class="sidebar-logo">MYU WEB</div>
+        
         <div id="user-info">
-            <img src="images/jefauu.jpg" alt="User">
+            <img src="../images/jefauu.jpg" alt="User">
             <div>Tay</div>
             <div class="text-success">• ONLINE</div>
         </div>
+        
         <ul class="nav flex-column">
             <li class="nav-item">
                 <a href="../productos.html" class="nav-link">🛍️ Productos</a>
@@ -207,57 +191,109 @@
         </ul>
     </div>
 
-    <!-- Contenido Principal -->
     <div id="main-content">
-        <div class="container">
-            <h2>Reporte: Cantidad de Productos por Categoría y Accesorio</h2>
-            <div class="row">
-                <div class="col-md-6">
-                    <h3>Tabla de productos por categoría</h3>
-                    <table id="tablaCategorias" class="table table-bordered table-hover">
-                        <thead>
-                            <tr>
-                                <th>Categoría</th>
-                                <th>Cantidad de productos</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                    <div class="summary-box text-center">
-                        <h5>Resumen de Inventario</h5>
-                        <p><strong>Total de Categorías:</strong> <span id="totalCategorias"></span></p>
-                        <p><strong>Total de Productos en Categorías:</strong> <span id="totalProductosCategorias"></span></p>
-                        <p><strong>Total de Accesorios:</strong> <span id="totalAccesorios"></span></p>
-                        <p><strong>Total de Productos en Accesorios:</strong> <span id="totalProductosAccesorios"></span></p>
-                        <p><strong>Última Actualización:</strong> <span id="lastUpdate"></span></p>
-                    </div>
+        <h1>MYU - Zapatos y Zapatillas</h1>
+        <p>Administración de productos de la categoría Zapatos y Zapatillas</p>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productModal">Agregar Producto</button>
+
+        <table class="table mt-3 table-hover">
+            <thead>
+                <tr>
+                    <th>ID Producto</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Precio</th>
+                    <th>Imágenes</th>
+                    <th>Stock</th>
+                    <th>Talla</th>
+                    <th>Colores</th>
+                    <th>Descuento</th>
+                    <th>Fecha de Registro</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="productTable">
+                <!-- Aquí se insertarán los productos -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal para agregar o editar productos -->
+    <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="productModalLabel">Editar Producto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="col-md-6">
-                    <h3>Tabla de productos por accesorio</h3>
-                    <table id="tablaAccesorios" class="table table-bordered table-hover">
-                        <thead>
-                            <tr>
-                                <th>Accesorio</th>
-                                <th>Cantidad de productos</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="row mt-4">
-                <div class="col-md-6">
-                    <h3>Gráfico de categorías</h3>
-                    <canvas id="productosChartCategorias" width="400" height="400"></canvas>
-                </div>
-                <div class="col-md-6">
-                    <h3>Gráfico de accesorios</h3>
-                    <canvas id="productosPizza" width="400" height="400"></canvas>
+                <div class="modal-body">
+                    <form id="productForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="nombreProducto" class="form-label">Nombre Producto</label>
+                                <input type="text" class="form-control" id="nombreProducto" placeholder="Nombre del producto" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="desProducto" class="form-label">Descripción</label>
+                                <input type="text" class="form-control" id="desProducto" placeholder="Descripción" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="precio" class="form-label">Precio</label>
+                                <input type="number" class="form-control" id="precio" placeholder="Precio" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="stock" class="form-label">Stock</label>
+                                <input type="number" class="form-control" id="stock" placeholder="Stock" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="talla" class="form-label">Talla</label>
+                                <input type="text" class="form-control" id="talla" placeholder="Talla" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="colores" class="form-label">Colores (separados por comas)</label>
+                                <input type="text" class="form-control" id="colores" placeholder="Colores" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label for="img1" class="form-label">Imagen 1 (URL)</label>
+                                <input type="text" class="form-control" id="img1" placeholder="URL Imagen 1">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="img2" class="form-label">Imagen 2 (URL)</label>
+                                <input type="text" class="form-control" id="img2" placeholder="URL Imagen 2">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="img3" class="form-label">Imagen 3 (URL)</label>
+                                <input type="text" class="form-control" id="img3" placeholder="URL Imagen 3">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="img4" class="form-label">Imagen 4 (URL)</label>
+                                <input type="text" class="form-control" id="img4" placeholder="URL Imagen 4">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="descuento" class="form-label">Descuento (%)</label>
+                                <input type="number" class="form-control" id="descuento" placeholder="Descuento">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="fechaRegistro" class="form-label">Fecha de Registro</label>
+                                <input type="date" class="form-control" id="fechaRegistro" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-3">Guardar Producto</button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         function toggleSubmenu(submenuId) {
             const submenu = document.getElementById(submenuId);
@@ -266,6 +302,6 @@
             toggleButton.classList.toggle("open");
         }
     </script>
-    <script src="scripts/reportes.js"></script>
+    <script src="../scripts/zapatos_y_zapatillas.js"></script>
 </body>
 </html>

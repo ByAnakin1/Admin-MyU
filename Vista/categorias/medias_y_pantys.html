@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administrador - Vestidos</title>
+    <title>Administrador - Medias y Pantys</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         :root {
@@ -168,8 +168,8 @@
     </div>
 
     <div id="main-content">
-        <h1>MYU - Vestidos</h1>
-        <p>Administración de productos de la categoría Vestidos</p>
+        <h1>MYU - Medias y Pantys</h1>
+        <p>Administración de productos de la categoría Medias y Pantys</p>
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productModal">Agregar Producto</button>
 
         <table class="table mt-3 table-hover">
@@ -276,11 +276,18 @@
 
         function toggleSubmenu(submenuId) {
             const submenu = document.getElementById(submenuId);
+
+            if (submenuId === 'categoriasSubmenu') {
+                categoriasSubmenuOpen = !categoriasSubmenuOpen;
+            } else if (submenuId === 'accesoriosSubmenu') {
+                accesoriosSubmenuOpen = !accesoriosSubmenuOpen;
+            }
+
             submenu.classList.toggle('show');
             const toggleButton = document.querySelector(`a[onclick="toggleSubmenu('${submenuId}')"]`);
             toggleButton.classList.toggle('open');
         }
     </script>
-    <script src="../scripts/vestidos.js"></script>
+    <script src="../scripts/medias_y_pantys.js"></script>
 </body>
 </html>

@@ -2076,6 +2076,20 @@ app.get('/reportes/todos', (req, res) => {
     });
   });
   
+  app.get('/productos', (req, res) => {
+    const searchQuery = req.query.search || ''; // Obtener el término de búsqueda
+    const query = `
+        SELECT * FROM productos 
+        WHERE nombre_producto LIKE ?`; // Realizamos búsqueda en el nombre del producto
+    db.query(query, [`%${searchQuery}%`], (error, results) => {
+        if (error) {
+            console.error('Error al obtener productos:', error);
+            return res.status(500).json({ success: false, message: 'Error al obtener productos' });
+        }
+        res.json(results); // Devolvemos los productos filtrados
+    });
+});
+
 // Ruta para obtener todos los productos
 app.get('/productos', (req, res) => {
     const query = 'SELECT * FROM productos';

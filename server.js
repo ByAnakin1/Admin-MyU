@@ -23,6 +23,75 @@ db.connect(err => {
     console.log('Conectado a la base de datos MySQL');
 });
 
+// Ruta para obtener todos los banners o buscar por tipo
+app.get('/banners', (req, res) => {
+    const searchQuery = req.query.search || ''; // Obtener el término de búsqueda (si existe)
+    const query = `
+        SELECT * FROM banners 
+        WHERE tipo LIKE ?`; // Buscar en el campo "tipo"
+    
+    db.query(query, [`%${searchQuery}%`], (error, results) => {
+        if (error) {
+            console.error('Error al obtener banners:', error);
+            return res.status(500).json({ success: false, message: 'Error al obtener banners' });
+        }
+        res.json(results); // Enviar los banners encontrados
+    });
+});
+
+// Ruta para agregar un nuevo banner
+app.post('/banners', (req, res) => {
+    const { tipo, img1, img2, img3, img1cell, img2cell, img3cell } = req.body;
+
+    const query = `
+        INSERT INTO banners (tipo, img1, img2, img3, img1cell, img2cell, img3cell)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+    `;
+
+    db.query(query, [tipo, img1, img2, img3, img1cell, img2cell, img3cell], (error, results) => {
+        if (error) {
+            console.error('Error al agregar banner:', error);
+            return res.status(500).json({ success: false, message: 'Error al agregar banner' });
+        }
+        res.json({ success: true, message: 'Banner agregado exitosamente' });
+    });
+});
+
+// Ruta para actualizar un banner
+app.put('/banners/:id', (req, res) => {
+    const id_banner = req.params.id;
+    const { tipo, img1, img2, img3, img1cell, img2cell, img3cell } = req.body;
+
+    const query = `
+        UPDATE banners 
+        SET tipo = ?, img1 = ?, img2 = ?, img3 = ?, img1cell = ?, img2cell = ?, img3cell = ?
+        WHERE id_banner = ?
+    `;
+
+    db.query(query, [tipo, img1, img2, img3, img1cell, img2cell, img3cell, id_banner], (error, results) => {
+        if (error) {
+            console.error('Error al actualizar banner:', error);
+            return res.status(500).json({ success: false, message: 'Error al actualizar el banner' });
+        }
+        res.json({ success: true, message: 'Banner actualizado exitosamente' });
+    });
+});
+// Ruta para eliminar un banner
+app.delete('/banners/:id', (req, res) => {
+    const id_banner = req.params.id;
+
+    const query = 'DELETE FROM banners WHERE id_banner = ?';
+    
+    db.query(query, [id_banner], (error, results) => {
+        if (error) {
+            console.error('Error al eliminar banner:', error);
+            return res.status(500).json({ success: false, message: 'Error al eliminar banner' });
+        }
+        res.json({ success: true, message: 'Banner eliminado exitosamente' });
+    });
+});
+
+
 // Obtener todos los productos de la categoría "Vinchas"
 app.get('/api/vinchas', (req, res) => {
     const query = 'SELECT * FROM productos WHERE id_cat_accesorio = 16';

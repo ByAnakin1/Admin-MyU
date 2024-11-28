@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', fetchProducts);
 // Obtener productos desde el servidor y mostrarlos en la tabla
 async function fetchProducts() {
     try {
-        const res = await fetch('http://localhost:3000/api/anillos'); // Ruta para la categoría "Anillos"
+        const res = await fetch('http://localhost:3000/api/anillos'); // Ruta para obtener los productos de Anillos
         if (!res.ok) throw new Error('Error al obtener productos');
         const products = await res.json();
         renderProducts(products);
@@ -27,6 +27,8 @@ function renderProducts(products) {
                 <td>${product.id_producto}</td>
                 <td>${product.nombre_producto}</td>
                 <td>${product.descripcion_producto}</td>
+                <td>${product.estado_1}</td>
+                <td>${product.estado_2}</td>
                 <td>${product.precio}</td>
                 <td>
                     <img src="${product.img1}" width="50">
@@ -35,9 +37,9 @@ function renderProducts(products) {
                     ${product.img4 ? `<img src="${product.img4}" width="50">` : ''}
                 </td>
                 <td>${product.stock}</td>
-                <td>${product.talla || ''}</td>
-                <td>${product.colores || ''}</td>
-                <td>${product.descuento || ''}</td>
+                <td>${product.talla}</td>
+                <td>${product.colores}</td>
+                <td>${product.descuento}</td>
                 <td>${formattedDate}</td>
                 <td>
                     <button class="btn btn-warning btn-sm" onclick="editProduct(${product.id_producto})">Editar</button>
@@ -50,7 +52,7 @@ function renderProducts(products) {
 // Función para cargar los datos del producto en el formulario y abrir el modal para edición
 async function editProduct(id) {
     try {
-        const res = await fetch(`http://localhost:3000/api/anillos/${id}`);
+        const res = await fetch(`http://localhost:3000/api/anillos/${id}`); // Ruta para obtener el producto específico
         if (!res.ok) throw new Error('Error al obtener datos del producto');
         
         const product = await res.json();
@@ -58,15 +60,17 @@ async function editProduct(id) {
         // Llenar los campos del formulario con los datos del producto
         document.getElementById('nombreProducto').value = product.nombre_producto;
         document.getElementById('desProducto').value = product.descripcion_producto;
+        document.getElementById('estado_1').value = product.estado_1;
+        document.getElementById('estado_2').value = product.estado_2;
         document.getElementById('precio').value = product.precio;
         document.getElementById('stock').value = product.stock;
-        document.getElementById('talla').value = product.talla || '';
-        document.getElementById('colores').value = product.colores || '';
-        document.getElementById('descuento').value = product.descuento || '';
+        document.getElementById('talla').value = product.talla;
+        document.getElementById('colores').value = product.colores;
+        document.getElementById('descuento').value = product.descuento;
         document.getElementById('img1').value = product.img1;
-        document.getElementById('img2').value = product.img2 || '';
-        document.getElementById('img3').value = product.img3 || '';
-        document.getElementById('img4').value = product.img4 || '';
+        document.getElementById('img2').value = product.img2;
+        document.getElementById('img3').value = product.img3;
+        document.getElementById('img4').value = product.img4;
         document.getElementById('fechaRegistro').value = product.fecha_registro ? product.fecha_registro.split('T')[0] : '';
 
         editingProductId = id;
@@ -88,15 +92,17 @@ productForm.addEventListener('submit', async function (e) {
     const productData = {
         nombre_producto: document.getElementById('nombreProducto').value,
         descripcion_producto: document.getElementById('desProducto').value,
+        estado_1: document.getElementById('estado_1').value,
+        estado_2: document.getElementById('estado_2').value,
         precio: parseFloat(document.getElementById('precio').value),
         stock: parseInt(document.getElementById('stock').value),
-        talla: document.getElementById('talla').value || null,
-        colores: document.getElementById('colores').value || null,
-        descuento: parseFloat(document.getElementById('descuento').value) || null,
+        talla: document.getElementById('talla').value,
+        colores: document.getElementById('colores').value,
+        descuento: parseFloat(document.getElementById('descuento').value),
         img1: document.getElementById('img1').value,
-        img2: document.getElementById('img2').value || null,
-        img3: document.getElementById('img3').value || null,
-        img4: document.getElementById('img4').value || null,
+        img2: document.getElementById('img2').value,
+        img3: document.getElementById('img3').value,
+        img4: document.getElementById('img4').value,
         fecha_registro: document.getElementById('fechaRegistro').value
     };
 
@@ -104,7 +110,7 @@ productForm.addEventListener('submit', async function (e) {
         let res;
         if (editingProductId) {
             // Si estamos editando un producto, envía una solicitud PUT para actualizar
-            res = await fetch(`http://localhost:3000/api/anillos/${editingProductId}`, {
+            res = await fetch(`http://localhost:3000/api/anillos/${editingProductId}`, { 
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(productData)
@@ -139,7 +145,7 @@ productForm.addEventListener('submit', async function (e) {
 async function deleteProduct(id) {
     if (confirm('¿Estás seguro de que deseas eliminar este producto?')) {
         try {
-            const res = await fetch(`http://localhost:3000/api/anillos/${id}`, {
+            const res = await fetch(`http://localhost:3000/api/anillos/${id}`, { 
                 method: 'DELETE'
             });
 
@@ -153,3 +159,26 @@ async function deleteProduct(id) {
         }
     }
 }
+
+// Función de búsqueda de productos
+function searchProducts() {
+    const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+    const rows = document.getElementById('productTable').getElementsByTagName('tr');
+    
+    for (let row of rows) {
+        const cells = row.getElementsByTagName('td');
+        let match = false;
+        
+        for (let cell of cells) {
+            if (cell.textContent.toLowerCase().includes(searchQuery)) {
+                match = true;
+                break;
+            }
+        }
+        
+        row.style.display = match ? '' : 'none';
+    }
+}
+
+// Agregar el evento de búsqueda al campo de entrada
+document.getElementById('searchInput').addEventListener('input', searchProducts);

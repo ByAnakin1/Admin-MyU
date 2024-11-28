@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', fetchProducts);
 // Obtener productos desde el servidor y mostrarlos en la tabla
 async function fetchProducts() {
     try {
-        const res = await fetch('http://localhost:3000/api/faldas');
+        const res = await fetch('http://localhost:3000/api/faldas'); // Ruta para faldas
         if (!res.ok) throw new Error('Error al obtener productos');
         const products = await res.json();
         renderProducts(products);
@@ -18,18 +18,17 @@ async function fetchProducts() {
 }
 
 // Mostrar productos en la tabla con botones de editar y eliminar
-// Mostrar productos en la tabla con botones de editar y eliminar
 function renderProducts(products) {
     productTable.innerHTML = '';
     products.forEach(product => {
-        // Formatear fecha_registro
         const formattedDate = new Date(product.fecha_registro).toLocaleString();
-
         productTable.innerHTML += `
             <tr>
                 <td>${product.id_producto}</td>
                 <td>${product.nombre_producto}</td>
                 <td>${product.descripcion_producto}</td>
+                <td>${product.estado_1}</td>
+                <td>${product.estado_2}</td>
                 <td>${product.precio}</td>
                 <td>
                     <img src="${product.img1}" width="50">
@@ -41,7 +40,7 @@ function renderProducts(products) {
                 <td>${product.talla}</td>
                 <td>${product.colores}</td>
                 <td>${product.descuento}</td>
-                <td>${formattedDate}</td> <!-- Mostrar fecha_registro formateada -->
+                <td>${formattedDate}</td>
                 <td>
                     <button class="btn btn-warning btn-sm" onclick="editProduct(${product.id_producto})">Editar</button>
                     <button class="btn btn-danger btn-sm" onclick="deleteProduct(${product.id_producto})">Eliminar</button>
@@ -50,11 +49,10 @@ function renderProducts(products) {
     });
 }
 
-
 // Función para cargar los datos del producto en el formulario y abrir el modal para edición
 async function editProduct(id) {
     try {
-        const res = await fetch(`http://localhost:3000/api/faldas/${id}`);
+        const res = await fetch(`http://localhost:3000/api/faldas/${id}`); // Ruta para faldas
         if (!res.ok) throw new Error('Error al obtener datos del producto');
         
         const product = await res.json();
@@ -62,6 +60,8 @@ async function editProduct(id) {
         // Llenar los campos del formulario con los datos del producto
         document.getElementById('nombreProducto').value = product.nombre_producto;
         document.getElementById('desProducto').value = product.descripcion_producto;
+        document.getElementById('estado_1').value = product.estado_1;
+        document.getElementById('estado_2').value = product.estado_2;
         document.getElementById('precio').value = product.precio;
         document.getElementById('stock').value = product.stock;
         document.getElementById('talla').value = product.talla;
@@ -71,12 +71,10 @@ async function editProduct(id) {
         document.getElementById('img2').value = product.img2;
         document.getElementById('img3').value = product.img3;
         document.getElementById('img4').value = product.img4;
-        document.getElementById('fechaRegistro').value = product.fecha_registro ? product.fecha_registro.split('T')[0] : ''; // Llenar fecha_registro
+        document.getElementById('fechaRegistro').value = product.fecha_registro.split('T')[0];
 
-        // Guardar el ID del producto que se está editando
         editingProductId = id;
 
-        // Mostrar el modal
         const modalElement = document.getElementById('productModal');
         const modalInstance = new bootstrap.Modal(modalElement);
         modalInstance.show();
@@ -94,6 +92,8 @@ productForm.addEventListener('submit', async function (e) {
     const productData = {
         nombre_producto: document.getElementById('nombreProducto').value,
         descripcion_producto: document.getElementById('desProducto').value,
+        estado_1: document.getElementById('estado_1').value,
+        estado_2: document.getElementById('estado_2').value,
         precio: parseFloat(document.getElementById('precio').value),
         stock: parseInt(document.getElementById('stock').value),
         talla: document.getElementById('talla').value,
@@ -103,37 +103,28 @@ productForm.addEventListener('submit', async function (e) {
         img2: document.getElementById('img2').value,
         img3: document.getElementById('img3').value,
         img4: document.getElementById('img4').value,
-        fecha_registro: document.getElementById('fechaRegistro').value // Añadir fecha_registro
+        fecha_registro: document.getElementById('fechaRegistro').value
     };
 
     try {
-        let res;
-        if (editingProductId) {
-            // Si estamos editando un producto, envía una solicitud PUT para actualizar
-            res = await fetch(`http://localhost:3000/api/faldas/${editingProductId}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(productData)
-            });
-        } else {
-            // Si estamos agregando un nuevo producto, envía una solicitud POST
-            res = await fetch('http://localhost:3000/api/faldas', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(productData)
-            });
-        }
+        const url = editingProductId 
+            ? `http://localhost:3000/api/faldas/${editingProductId}` 
+            : 'http://localhost:3000/api/faldas';
+        const method = editingProductId ? 'PUT' : 'POST';
 
-        if (!res.ok) throw new Error(editingProductId ? 'Error al actualizar el producto' : 'Error al agregar el producto');
+        const res = await fetch(url, {
+            method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(productData)
+        });
 
-        // Recargar la lista de productos después de agregar o editar
+        if (!res.ok) throw new Error('Error al guardar el producto');
+        
         fetchProducts();
 
-        // Limpiar el formulario, cerrar el modal y restablecer el estado de edición
         productForm.reset();
-        const modalElement = document.getElementById('productModal');
-        const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
-        modalInstance.hide();
+        const modalElement = bootstrap.Modal.getInstance(document.getElementById('productModal'));
+        modalElement.hide();
         editingProductId = null;
     } catch (error) {
         console.error('Error al guardar el producto:', error);
@@ -145,13 +136,10 @@ productForm.addEventListener('submit', async function (e) {
 async function deleteProduct(id) {
     if (confirm('¿Estás seguro de que deseas eliminar este producto?')) {
         try {
-            const res = await fetch(`http://localhost:3000/api/faldas/${id}`, {
-                method: 'DELETE'
-            });
+            const res = await fetch(`http://localhost:3000/api/faldas/${id}`, { method: 'DELETE' });
 
             if (!res.ok) throw new Error('Error al eliminar el producto');
 
-            // Recargar la lista de productos después de eliminar uno
             fetchProducts();
         } catch (error) {
             console.error('Error al eliminar el producto:', error);
@@ -159,3 +147,26 @@ async function deleteProduct(id) {
         }
     }
 }
+
+// Función de búsqueda de productos
+function searchProducts() {
+    const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+    const rows = document.getElementById('productTable').getElementsByTagName('tr');
+    
+    for (let row of rows) {
+        const cells = row.getElementsByTagName('td');
+        let match = false;
+        
+        for (let cell of cells) {
+            if (cell.textContent.toLowerCase().includes(searchQuery)) {
+                match = true;
+                break;
+            }
+        }
+        
+        row.style.display = match ? '' : 'none';
+    }
+}
+
+// Agregar el evento de búsqueda al campo de entrada
+document.getElementById('searchInput').addEventListener('input', searchProducts);

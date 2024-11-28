@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', fetchProducts);
 // Obtener productos desde el servidor y mostrarlos en la tabla
 async function fetchProducts() {
     try {
-        const res = await fetch('http://localhost:3000/api/zapatos_y_zapatillas'); // Cambiado a la ruta correcta de zapatos y zapatillas
+        const res = await fetch('http://localhost:3000/api/zapatos_y_zapatillas');
         if (!res.ok) throw new Error('Error al obtener productos');
         const products = await res.json();
         renderProducts(products);
@@ -27,6 +27,8 @@ function renderProducts(products) {
                 <td>${product.id_producto}</td>
                 <td>${product.nombre_producto}</td>
                 <td>${product.descripcion_producto}</td>
+                <td>${product.estado_1}</td>
+                <td>${product.estado_2}</td>
                 <td>${product.precio}</td>
                 <td>
                     <img src="${product.img1}" width="50">
@@ -50,14 +52,16 @@ function renderProducts(products) {
 // Función para cargar los datos del producto en el formulario y abrir el modal para edición
 async function editProduct(id) {
     try {
-        const res = await fetch(`http://localhost:3000/api/zapatos_y_zapatillas/${id}`); // Cambiado a la ruta correcta de zapatos y zapatillas
+        const res = await fetch(`http://localhost:3000/api/zapatos_y_zapatillas/${id}`);
         if (!res.ok) throw new Error('Error al obtener datos del producto');
         
         const product = await res.json();
 
         // Llenar los campos del formulario con los datos del producto
         document.getElementById('nombreProducto').value = product.nombre_producto;
-        document.getElementById('desProducto').value = product.des_producto;
+        document.getElementById('desProducto').value = product.descripcion_producto;
+        document.getElementById('estado_1').value = product.estado_1;
+        document.getElementById('estado_2').value = product.estado_2;
         document.getElementById('precio').value = product.precio;
         document.getElementById('stock').value = product.stock;
         document.getElementById('talla').value = product.talla;
@@ -87,7 +91,9 @@ productForm.addEventListener('submit', async function (e) {
     // Crear el objeto con los datos del producto del formulario
     const productData = {
         nombre_producto: document.getElementById('nombreProducto').value,
-        des_producto: document.getElementById('desProducto').value,
+        descripcion_producto: document.getElementById('desProducto').value,
+        estado_1: document.getElementById('estado_1').value,
+        estado_2: document.getElementById('estado_2').value,
         precio: parseFloat(document.getElementById('precio').value),
         stock: parseInt(document.getElementById('stock').value),
         talla: document.getElementById('talla').value,
@@ -104,14 +110,14 @@ productForm.addEventListener('submit', async function (e) {
         let res;
         if (editingProductId) {
             // Si estamos editando un producto, envía una solicitud PUT para actualizar
-            res = await fetch(`http://localhost:3000/api/zapatos_y_zapatillas/${editingProductId}`, { // Cambiado a la ruta correcta de zapatos y zapatillas
+            res = await fetch(`http://localhost:3000/api/zapatos_y_zapatillas/${editingProductId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(productData)
             });
         } else {
             // Si estamos agregando un nuevo producto, envía una solicitud POST
-            res = await fetch('http://localhost:3000/api/zapatos_y_zapatillas', { // Cambiado a la ruta correcta de zapatos y zapatillas
+            res = await fetch('http://localhost:3000/api/zapatos_y_zapatillas', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(productData)
@@ -139,7 +145,7 @@ productForm.addEventListener('submit', async function (e) {
 async function deleteProduct(id) {
     if (confirm('¿Estás seguro de que deseas eliminar este producto?')) {
         try {
-            const res = await fetch(`http://localhost:3000/api/zapatos_y_zapatillas/${id}`, { // Cambiado a la ruta correcta de zapatos y zapatillas
+            const res = await fetch(`http://localhost:3000/api/zapatos_y_zapatillas/${id}`, {
                 method: 'DELETE'
             });
 
@@ -153,3 +159,26 @@ async function deleteProduct(id) {
         }
     }
 }
+
+// Función de búsqueda de productos
+function searchProducts() {
+    const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+    const rows = document.getElementById('productTable').getElementsByTagName('tr');
+    
+    for (let row of rows) {
+        const cells = row.getElementsByTagName('td');
+        let match = false;
+        
+        for (let cell of cells) {
+            if (cell.textContent.toLowerCase().includes(searchQuery)) {
+                match = true;
+                break;
+            }
+        }
+        
+        row.style.display = match ? '' : 'none';
+    }
+}
+
+// Agregar el evento de búsqueda al campo de entrada
+document.getElementById('searchInput').addEventListener('input', searchProducts);

@@ -207,7 +207,7 @@
                 <a href="banners.html" class="nav-link">📢 Banners</a>
             </li>
             <li class="nav-item">
-                <a href="../tiktoks.html" class="nav-link">🎬 Tiktoks</a>
+                <a href="../tiktok.html" class="nav-link">🎬 Tiktoks</a>
             </li>
             <li class="nav-item">
                 <a href="../ordenes.html" class="nav-link">📝 Órdenes</a>
@@ -268,6 +268,21 @@
                                     <input type="text" class="form-control" id="des_producto" required>
                                 </div>
                                 <div class="col-md-6">
+                                    <label for="estado_1" class="form-label">Estado 1</label>
+                                    <select class="form-control" id="estado_1">
+                                        <option value="" selected>Ninguno</option>
+                                        <option value="novedades">Novedades</option>
+                                    </select>
+                                </div>
+                                <!-- Estado 2 -->
+                                <div class="col-md-6">
+                                    <label for="estado_2" class="form-label">Estado 2</label>
+                                    <select class="form-control" id="estado_2">
+                                        <option value="" selected>Ninguno</option>
+                                        <option value="pre-orden">Pre-orden</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
                                     <label for="precio" class="form-label">Precio</label>
                                     <input type="number" class="form-control" id="precio" required>
                                 </div>
@@ -307,6 +322,8 @@
                                     <label for="fecha_registro" class="form-label">Fecha de Registro</label>
                                     <input type="date" class="form-control" id="fecha_registro" required>
                                 </div>
+                                <!-- Estado 1 -->
+                                
                             </div>
                             <button type="submit" class="btn btn-primary mt-3">Guardar Producto</button>
                         </form>

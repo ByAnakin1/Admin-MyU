@@ -13,24 +13,17 @@
             --text-color: #ecf0f1;
             --primary-color: #2980b9;
         }
-        body, html { height: 100%; margin: 0; overflow: hidden; }
+        body, html { height: 100%; margin: 0; }
         #sidebar {
             background-color: var(--sidebar-bg);
-            width: 280px;
-            height: 100vh;
-            position: fixed;
-            left: 0;
-            top: 0;
-            overflow-y: auto;
-            padding-top: 20px;
+            width: 280px; height: 100vh;
+            position: fixed; left: 0; top: 0;
+            overflow-y: auto; padding-top: 20px;
         }
         .sidebar-logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: var(--text-color);
-            padding: 1.5rem;
-            text-align: center;
-            background-color: var(--primary-color);
+            font-size: 1.8rem; font-weight: bold;
+            color: var(--text-color); padding: 1rem;
+            text-align: center; background-color: var(--primary-color);
             margin-bottom: 1rem;
         }
         #user-info {
@@ -47,18 +40,9 @@
             font-size: 1.1rem;
             color: var(--text-color);
         }
-        .text-success {
-            font-size: 1rem;
-            margin-top: 0.3rem;
-        }
         .nav-link {
-            color: var(--text-color);
-            padding: 0.8rem 1.5rem;
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-            transition: background-color 0.3s ease;
+            color: var(--text-color); padding: 0.8rem 1.5rem;
+            font-size: 1.1rem; display: flex; align-items: center;
         }
         .nav-link:hover {
             background-color: var(--sidebar-hover-bg);
@@ -79,23 +63,15 @@
             content: ' ▼';
             font-size: 0.8em;
             margin-left: auto;
-            transition: transform 0.3s ease;
         }
         .category-toggle.open::after {
-            transform: rotate(180deg);
+            content: ' ▲';
         }
         #main-content {
-            margin-left: 280px;
-            padding: 2rem;
-            background-color: var(--content-bg);
-            min-height: 100vh;
-            overflow-y: auto;
+            margin-left: 280px; padding: 2rem;
+            background-color: var(--content-bg); min-height: 100vh;
         }
-        h1 {
-            color: var(--primary-color);
-            font-size: 2.5rem;
-            font-weight: 300;
-        }
+        h1 { color: var(--primary-color); font-size: 2.5rem; }
         .btn-primary {
             background-color: var(--primary-color);
             border-color: var(--primary-color);
@@ -110,7 +86,6 @@
 <body>
     <div id="sidebar" class="text-white">
         <div class="sidebar-logo">MYU WEB</div>
-        
         <div id="user-info">
             <img src="../images/jefauu.jpg" alt="User">
             <div>Tay</div>
@@ -166,7 +141,6 @@
                 </ul>
             </li>
             <li class="nav-item">
-                <a href="/Vista/ventas.html" class="nav-link">💰 Ventas</a>
             </li>
             <li class="nav-item">
                 <a href="../reportes.html" class="nav-link">📈 Reportes</a>
@@ -177,7 +151,7 @@
                 <a href="../banners.html" class="nav-link">📢 Banners</a>
             </li>
             <li class="nav-item">
-                <a href="../tiktoks.html" class="nav-link">🎬 Tiktoks</a>
+                <a href="../tiktok.html" class="nav-link">🎬 Tiktoks</a>
             </li>
             <li class="nav-item">
                 <a href="../ordenes.html" class="nav-link">📝 Órdenes</a>
@@ -189,12 +163,14 @@
                 <a href="../productos_aceptados.html" class="nav-link">✔️ Productos Aceptados</a>
             </li>
         </ul>
+        
     </div>
 
     <div id="main-content">
         <h1>MYU - Zapatos y Zapatillas</h1>
         <p>Administración de productos de la categoría Zapatos y Zapatillas</p>
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productModal">Agregar Producto</button>
+        <input type="text" id="searchInput" class="form-control mt-3" placeholder="Buscar por nombre de producto..." onkeyup="searchProducts()">
 
         <table class="table mt-3 table-hover">
             <thead>
@@ -202,6 +178,8 @@
                     <th>ID Producto</th>
                     <th>Nombre</th>
                     <th>Descripción</th>
+                    <th>Estado 1</th>
+                    <th>Estado 2</th>
                     <th>Precio</th>
                     <th>Imágenes</th>
                     <th>Stock</th>
@@ -238,7 +216,26 @@
                                 <input type="text" class="form-control" id="desProducto" placeholder="Descripción" required>
                             </div>
                         </div>
-                        <div class="row">
+                        
+                        <!-- Campos de selección para Estado 1 y Estado 2 -->
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <label for="estado_1" class="form-label">Estado 1</label>
+                                <select class="form-control" id="estado_1">
+                                    <option value="ninguno">Ninguno</option>
+                                    <option value="novedad">Novedad</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="estado_2" class="form-label">Estado 2</label>
+                                <select class="form-control" id="estado_2">
+                                    <option value="ninguno">Ninguno</option>
+                                    <option value="pre_compra">Pre-compra</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
                             <div class="col-md-6">
                                 <label for="precio" class="form-label">Precio</label>
                                 <input type="number" class="form-control" id="precio" placeholder="Precio" required>
@@ -251,11 +248,11 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <label for="talla" class="form-label">Talla</label>
-                                <input type="text" class="form-control" id="talla" placeholder="Talla" required>
+                                <input type="text" class="form-control" id="talla" placeholder="Talla" >
                             </div>
                             <div class="col-md-6">
                                 <label for="colores" class="form-label">Colores (separados por comas)</label>
-                                <input type="text" class="form-control" id="colores" placeholder="Colores" required>
+                                <input type="text" class="form-control" id="colores" placeholder="Colores" >
                             </div>
                         </div>
                         <div class="row">

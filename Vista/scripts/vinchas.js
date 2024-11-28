@@ -1,12 +1,14 @@
 const productTable = document.getElementById('productTable');
 const productForm = document.getElementById('productForm');
-let editingProductId = null;
+let editingProductId = null; // Variable para saber si estamos editando un producto
 
+// Cargar productos al iniciar la página
 document.addEventListener('DOMContentLoaded', fetchProducts);
 
+// Obtener productos desde el servidor y mostrarlos en la tabla
 async function fetchProducts() {
     try {
-        const res = await fetch('http://localhost:3000/api/vinchas'); // Ruta para la categoría "Vinchas"
+        const res = await fetch('http://localhost:3000/api/vinchas'); // Ruta para vinchas
         if (!res.ok) throw new Error('Error al obtener productos');
         const products = await res.json();
         renderProducts(products);
@@ -15,6 +17,7 @@ async function fetchProducts() {
     }
 }
 
+// Mostrar productos en la tabla con botones de editar y eliminar
 function renderProducts(products) {
     productTable.innerHTML = '';
     products.forEach(product => {
@@ -24,6 +27,8 @@ function renderProducts(products) {
                 <td>${product.id_producto}</td>
                 <td>${product.nombre_producto}</td>
                 <td>${product.descripcion_producto}</td>
+                <td>${product.estado_1}</td>
+                <td>${product.estado_2}</td>
                 <td>${product.precio}</td>
                 <td>
                     <img src="${product.img1}" width="50">
@@ -32,9 +37,9 @@ function renderProducts(products) {
                     ${product.img4 ? `<img src="${product.img4}" width="50">` : ''}
                 </td>
                 <td>${product.stock}</td>
-                <td>${product.talla || ''}</td>
-                <td>${product.colores || ''}</td>
-                <td>${product.descuento || ''}</td>
+                <td>${product.talla}</td>
+                <td>${product.colores}</td>
+                <td>${product.descuento}</td>
                 <td>${formattedDate}</td>
                 <td>
                     <button class="btn btn-warning btn-sm" onclick="editProduct(${product.id_producto})">Editar</button>
@@ -44,25 +49,27 @@ function renderProducts(products) {
     });
 }
 
+// Función para editar producto
 async function editProduct(id) {
     try {
         const res = await fetch(`http://localhost:3000/api/vinchas/${id}`);
         if (!res.ok) throw new Error('Error al obtener datos del producto');
-        
         const product = await res.json();
 
         document.getElementById('nombreProducto').value = product.nombre_producto;
         document.getElementById('desProducto').value = product.descripcion_producto;
+        document.getElementById('estado_1').value = product.estado_1;
+        document.getElementById('estado_2').value = product.estado_2;
         document.getElementById('precio').value = product.precio;
         document.getElementById('stock').value = product.stock;
-        document.getElementById('talla').value = product.talla || '';
-        document.getElementById('colores').value = product.colores || '';
-        document.getElementById('descuento').value = product.descuento || '';
+        document.getElementById('talla').value = product.talla;
+        document.getElementById('colores').value = product.colores;
+        document.getElementById('descuento').value = product.descuento;
         document.getElementById('img1').value = product.img1;
         document.getElementById('img2').value = product.img2 || '';
         document.getElementById('img3').value = product.img3 || '';
         document.getElementById('img4').value = product.img4 || '';
-        document.getElementById('fechaRegistro').value = product.fecha_registro ? product.fecha_registro.split('T')[0] : '';
+        document.getElementById('fechaRegistro').value = product.fecha_registro.split('T')[0];
 
         editingProductId = id;
 
@@ -74,6 +81,7 @@ async function editProduct(id) {
     }
 }
 
+// Manejar la creación o edición de productos cuando se envía el formulario
 productForm.addEventListener('submit', async function (e) {
     e.preventDefault();
 
@@ -82,14 +90,16 @@ productForm.addEventListener('submit', async function (e) {
         descripcion_producto: document.getElementById('desProducto').value,
         precio: parseFloat(document.getElementById('precio').value),
         stock: parseInt(document.getElementById('stock').value),
-        talla: document.getElementById('talla').value || null,
-        colores: document.getElementById('colores').value || null,
-        descuento: parseFloat(document.getElementById('descuento').value) || null,
+        talla: document.getElementById('talla').value || '',
+        colores: document.getElementById('colores').value || '',
+        descuento: parseFloat(document.getElementById('descuento').value) || '',
         img1: document.getElementById('img1').value,
-        img2: document.getElementById('img2').value || null,
-        img3: document.getElementById('img3').value || null,
-        img4: document.getElementById('img4').value || null,
-        fecha_registro: document.getElementById('fechaRegistro').value
+        img2: document.getElementById('img2').value || '',
+        img3: document.getElementById('img3').value || '',
+        img4: document.getElementById('img4').value || '',
+        estado_1: document.getElementById('estado_1').value || '',
+        estado_2: document.getElementById('estado_2').value || '',
+        fecha_registro: document.getElementById('fechaRegistro').value || ''
     };
 
     try {
@@ -108,12 +118,11 @@ productForm.addEventListener('submit', async function (e) {
             });
         }
 
-        if (!res.ok) throw new Error(editingProductId ? 'Error al actualizar el producto' : 'Error al agregar el producto');
-
-        fetchProducts();
+        if (!res.ok) throw new Error('Error al agregar o actualizar el producto');
+        fetchProducts(); // Recargar productos
         productForm.reset();
         const modalElement = document.getElementById('productModal');
-        const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+        const modalInstance = bootstrap.Modal.getInstance(modalElement);
         modalInstance.hide();
         editingProductId = null;
     } catch (error) {
@@ -121,6 +130,7 @@ productForm.addEventListener('submit', async function (e) {
     }
 });
 
+// Función para eliminar un producto
 async function deleteProduct(id) {
     if (confirm('¿Estás seguro de que deseas eliminar este producto?')) {
         try {
@@ -129,10 +139,32 @@ async function deleteProduct(id) {
             });
 
             if (!res.ok) throw new Error('Error al eliminar el producto');
-
-            fetchProducts();
+            fetchProducts(); // Recargar productos
         } catch (error) {
             console.error('Error al eliminar el producto:', error);
         }
     }
 }
+
+// Función de búsqueda de productos
+function searchProducts() {
+    const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+    const rows = document.getElementById('productTable').getElementsByTagName('tr');
+    
+    for (let row of rows) {
+        const cells = row.getElementsByTagName('td');
+        let match = false;
+        
+        for (let cell of cells) {
+            if (cell.textContent.toLowerCase().includes(searchQuery)) {
+                match = true;
+                break;
+            }
+        }
+        
+        row.style.display = match ? '' : 'none';
+    }
+}
+
+// Agregar el evento de búsqueda al campo de entrada
+document.getElementById('searchInput').addEventListener('input', searchProducts);

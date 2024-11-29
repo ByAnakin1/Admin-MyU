@@ -237,12 +237,16 @@ document.getElementById('productForm').addEventListener('submit', function(event
         },
         body: JSON.stringify(newProducto)
     })
-    .then(response => response.json())
-    .then(data => {
-        alert('Producto guardado exitosamente');
-        loadProductos();  // Recargamos los productos
-        document.getElementById('productModal').modal('hide');
-        resetForm();
+    .then(response => {
+        if (!response.ok) throw new Error('Error en la operación');
+        return response.json();
+    })
+    .then(() => {
+        loadProductos(); // Recargar los productos
+        const modalElement = document.getElementById('productModal');
+        const modal = bootstrap.Modal.getInstance(modalElement);
+        modal.hide();
+        resetForm(); // Resetear el formulario
     })
     .catch(error => console.error('Error al guardar producto:', error));
 });

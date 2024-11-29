@@ -2649,18 +2649,18 @@ app.post('/productos', (req, res) => {
 app.put('/productos/:id', (req, res) => {
     const id_producto = req.params.id;
     const {
-        id_categoria, nombre_producto, descripcion_producto, precio, descuento, img1, img2, img3, img4, talla, colores, stock, fecha_registro, estado_1, estado_2
+        id_categoria, nombre_producto, descripcion_producto, precio, descuento, img1, img2, img3, img4, talla, colores, stock, fecha_registro, estado_1, estado_2, id_cat_accesorio
     } = req.body;
 
     const query = `
         UPDATE productos 
         SET id_categoria = ?, nombre_producto = ?, descripcion_producto = ?, precio = ?, 
-            descuento = ?, img1 = ?, img2 = ?, img3 = ?, img4 = ?, talla = ?, colores = ?, stock = ?, fecha_registro = ?, estado_1 = ?, estado_2 = ? 
+            descuento = ?, img1 = ?, img2 = ?, img3 = ?, img4 = ?, talla = ?, colores = ?, stock = ?, fecha_registro = ?, estado_1 = ?, estado_2 = ?, id_cat_accesorio = ? 
         WHERE id_producto = ?
     `;
 
     db.query(query, [
-        id_categoria, nombre_producto, descripcion_producto, precio, descuento, img1, img2, img3, img4, talla, colores, stock, fecha_registro, estado_1, estado_2, id_producto
+        id_categoria, nombre_producto, descripcion_producto, precio, descuento, img1, img2, img3, img4, talla, colores, stock, fecha_registro, estado_1, estado_2, id_cat_accesorio, id_producto
     ], (error, results) => {
         if (error) {
             console.error('Error al actualizar producto:', error);
@@ -2669,6 +2669,7 @@ app.put('/productos/:id', (req, res) => {
         res.json({ success: true, message: 'Producto actualizado' });
     });
 });
+
 
 // Ruta para eliminar un producto
 app.delete('/productos/:id', (req, res) => {
